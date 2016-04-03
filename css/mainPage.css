@@ -1,0 +1,69 @@
+/*
+    Author: Nathan Thurmond
+    Name: mainPage.css
+    Description: Main style sheet for MechMarkup site
+*/
+
+@font-face {
+    font-family:"MainFrame";
+    src: url("fonts/MAINBB.ttf") /* TTF file for CSS3 browsers */
+}
+
+html, body {
+    margin: 0px 0px 0px 0px;
+}
+
+body {
+    background-color: #DFE2DB;
+}
+
+#menuBar {
+    width: 100%;
+    height: 100px;
+    background: #191919; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#191919, #5b634f); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#191919, #5b634f); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#191919, #5b634f); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#191919, #5b634f); /* Standard syntax */
+}
+
+.menuBarTabs {
+    position:absolute;
+    top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 60px;
+    width: 140px;
+    background-color: #FFF056;
+    border-radius: 7px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.menuBarTabsContainer {
+    background-color: #FFF056;
+    margin: 0 auto;
+    width: 140px;
+    height: 60px;
+    display: table;
+}
+
+.menuBarTabsContainer div {
+    display: table-cell;
+    vertical-align: middle;
+    text-align:center;
+    height: 100%;
+    width: 100%;
+    background-color: #FFF056;
+}
+
+.menuBarTabsContainer div p {
+    font-family:'Agency FB', sans-serif;
+    font-weight: bold;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+#allMechs div div p {
+    font-size: 30px;
+}
