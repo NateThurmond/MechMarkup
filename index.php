@@ -77,6 +77,12 @@
                 <div class="pageIndicator"><div class="arrow-down"></div></div>
             </div>
             
+            <!-- Upload -->
+            <div class="tabContainer uploadClass">
+                <div class="uploadTitle">Upload Mech</div>
+                <div id="uploadImage"></div>
+            </div>
+            
         </div>
         
         <!-- Main controls -->
@@ -121,16 +127,41 @@
                 <button id="unCheckAll">Uncheck All</button>
             </div>    
         </div>
+        
+        <!-- Mech Listings -->
+        <div id="mechListings">
+            
+            <!-- Individual mechs here - content replace from javascript -->
+            
+        </div>
     </body>
     
     <script>
         $(document).ready(function() {
             
             $.getJSON('phpScripts/getAllMechs.php', function(allMechs) {
-                console.log(allMechs);
                 
                 for (mech in allMechs) {
                     
+                    var mechID = mech;
+                    var mechStats = allMechs[mech];
+                    mechStats['_id'] = mechID;
+                    
+                    var parentElement = $('#mechListings');
+                    var elemToAppend = '<div class="mechBox"><div class="mechTitle"><input type="checkbox" id="checkBox_' +
+                        mechID + '"/><h5>' + mechStats['mechName'] + '</h5></div><div class="mechStats" id="mechStats_' + mechID + '"><div><label>Weight: </label><p>' +
+                        mechStats['tonnage'] + '</p></div><div><label>Walk: </label><p>' +
+                        mechStats['walk'] + '</p></div><div><label>Run: </label><p>' + mechStats['run'] + '</p></div><div><label>Jump: </label><p>' +
+                        mechStats['jump'] + '</p></div><div><label>Weapons: </label><p>' + mechStats['weapons'] + '</p></div><div><label>Tags: </label><p>' +
+                        mechStats['tags'] + '</p></div></div></div>';  
+                        
+                    parentElement.append(elemToAppend);
+                    
+                    $('#checkBox_' + mechID).data(mechStats);
+                    $('#mechStats_' + mechID).data(mechStats);
+                    
+                    console.log($('#checkBox_' + mechID).data());
+                    console.log($('#mechStats_' + mechID).data());
                 }
             });
         })
