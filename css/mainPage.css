@@ -4,10 +4,31 @@
     Description: Main style sheet for MechMarkup site
 */
 
-@font-face {
-    font-family:"MainFrame";
-    src: url("fonts/MAINBB.ttf") /* TTF file for CSS3 browsers */
+/*@font-face {
+    font-family: 'mainframe_bbbold';
+    src: url('../fonts/mainbb__-webfont.eot');
+    src: url('../fonts/mainbb__-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/mainbb__-webfont.woff2') format('woff2'),
+         url('../fonts/mainbb__-webfont.woff') format('woff'),
+         url('../fonts/mainbb__-webfont.ttf') format('truetype'),
+         url('../fonts/mainbb__-webfont.svg#mainframe_bbbold') format('svg');
 }
+
+@font-face {
+    font-family: 'neuropol';
+    src: url('../fonts/neuropol x rg.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'ROBOTECH';
+    src: url('../fonts/ROBOTECH GP.ttf') format('truetype');
+}*/
+
+@font-face {
+    font-family: 'zekton';
+    src: url('../fonts/zekton rg.ttf') format('truetype');
+}
+
 
 html, body {
     margin: 0px 0px 0px 0px;
@@ -19,7 +40,7 @@ body {
 
 #menuBar {
     width: 100%;
-    height: 100px;
+    height: 110px;
     background: #191919; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#191919, #5b634f); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#191919, #5b634f); /* For Opera 11.1 to 12.0 */
@@ -28,20 +49,63 @@ body {
 }
 
 .menuBarTabs {
-    position:absolute;
-    top: 20px;
+    position: relative;
+    z-index: 20;
+    display: inline-block;
+    margin-top: 9px;
     margin-left: 20px;
     margin-right: 20px;
     height: 60px;
     width: 140px;
-    background-color: #FFF056;
+    background-color: transparent;
     border-radius: 7px;
     overflow-x: hidden;
     overflow-y: auto;
+    border: 2px dashed black;
+}
+
+.tabContainer {
+    width: 140px;
+    display: inline-block;
+    margin-right: 30px;
+}
+
+.viewTitle {
+    font-family: zekton, sans-serif;
+    width: 140px;
+    height: 10px;
+    text-align: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.pageIndicator {
+    width: 140px;
+    min-height:10px;
+    height:10px;
+    text-align: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: -5px;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 42px solid transparent;
+    border-right: 42px solid transparent;
+    border-top: 12px solid transparent;
+    margin-left: 32px;
+}
+
+.filledArrow {
+    border-top: 16px solid #8592A8;
 }
 
 .menuBarTabsContainer {
-    background-color: #FFF056;
     margin: 0 auto;
     width: 140px;
     height: 60px;
@@ -54,16 +118,26 @@ body {
     text-align:center;
     height: 100%;
     width: 100%;
-    background-color: #FFF056;
 }
 
 .menuBarTabsContainer div p {
-    font-family:'Agency FB', sans-serif;
+    font-family: zekton, sans-serif;
     font-weight: bold;
+    font-size: 17px;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
 }
 
 #allMechs div div p {
-    font-size: 30px;
+    font-size: 28px;
+}
+
+.filled {
+    background-color: #FFF056;
+    border: 2px solid black;
+}
+
+.notfilled {
+    background-color: #cdd2c6;
+    border: 1.5px dashed black;
 }
