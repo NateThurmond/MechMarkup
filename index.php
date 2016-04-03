@@ -8,6 +8,8 @@
         <script src="js/jquery-1.12.2.min.js"></script>
     </head>
     <body>
+        
+        <!-- Menu Bar -->
         <div id='menuBar'>
             
             <!-- Home Tab -->
@@ -76,13 +78,60 @@
             </div>
             
         </div>
+        
+        <!-- Main controls -->
+        <div id="mainControls">
+            
+            <!-- Sort controls -->
+            <div id="sortBy">
+                <h5>Sort By</h5>
+                <select id="sortKey">
+                    <option>Name</option>
+                    <option>Weight</option>
+                    <option>Walk</option>
+                    <option>Run</option>
+                    <option>Jump</option>
+                </select>
+                <select id="sortOrder">
+                    <option>Asc</option>
+                    <option>Desc</option>
+                </select>
+            </div>
+            
+            <!-- Vertical Divider -->
+            <div class="verticalLine"></div>
+            
+            <!-- Filter controls -->
+            <div id="filterControls">
+                <h5>Filter Current View</h5>
+                <input id="filter_Name" type="text" placeholder="Name" />
+                <input id="filter_Weight" type="text" placeholder="Weight" />
+                <input id="filter_Walk" type="text" placeholder="Walk" />
+                <input id="filter_Run" type="text" placeholder="Run" />
+                <input id="Filter_Jump" type="text" placeholder="Jump" />
+                <input id="Filter_Weapons" type="text" placeholder="Weapons" />
+                <input id="Filter_Tags" type="text" placeholder="Tags" />
+            </div>
+            
+            <!-- Vertical Divider -->
+            <div class="verticalLine"></div>
+            
+            <!-- UnSelect Control -->
+            <div id="unselectAll">
+                <button id="unCheckAll">Uncheck All</button>
+            </div>    
+        </div>
     </body>
     
     <script>
         $(document).ready(function() {
             
             $.getJSON('phpScripts/getAllMechs.php', function(allMechs) {
-                console.log(allMechs);    
+                console.log(allMechs);
+                
+                for (mech in allMechs) {
+                    
+                }
             });
         })
     </script>

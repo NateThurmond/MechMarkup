@@ -48,6 +48,76 @@ body {
     background: linear-gradient(#191919, #5b634f); /* Standard syntax */
 }
 
+#mainControls {
+    width: 98%;
+    height: 70px;
+    border-radius: 20px;
+    margin-Left: 1%;
+    margin-top: 8px;
+    background: #5b634f; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(#5b634f, #818e71); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#5b634f, #818e71); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#5b634f, #818e71); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#5b634f, #818e71); /* Standard syntax */   
+}
+
+#sortBy {
+    vertical-align: top;
+    text-align: center;
+    display: inline-block;
+    width: 15%;
+    height: 50px;
+    margin-top: 10px;
+}
+
+#filterControls {
+    width: 70%;
+    vertical-align: top;
+    text-align: center;
+    display: inline-block;
+    height: 50px;
+    margin-top: 10px;
+}
+
+#unselectAll {
+    width: 10%;
+    vertical-align: top;
+    text-align: center;
+    display: inline-block;
+    height: 50px;
+    margin-top: 10px;
+    font-family: zekton, sans-serif;
+}
+
+#sortBy h5, #filterControls h5 {
+    font-family: zekton, sans-serif;
+    margin: 0px 0px 6px 0px;
+}
+
+#sortBy select, #filterControls input {
+    font-family: zekton, sans-serif;
+    display: inline-block;
+}
+
+#filterControls input {
+    width: 13%;
+}
+
+#unCheckAll {
+    width: 100%;
+    font-family: zekton, sans-serif;
+    margin-top: 10%;
+    margin-left: 2%;
+}
+
+.verticalLine {
+    vertical-align: top;
+    display: inline-block;
+    height: 70px;
+    width: 5px;
+    border-left: 2px solid black;
+}
+
 .menuBarTabs {
     position: relative;
     z-index: 20;
