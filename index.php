@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="css/mainPage.css" type="text/css" charset="utf-8" >
         
         <script src="js/jquery-1.12.2.min.js"></script>
+        <script src="js/pdfobject.js"></script>
     </head>
     <body>
         
@@ -31,7 +32,7 @@
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer'>
                         <div>
-                            <p class='removeWhenFilled'>Drag Mechs Here</p>
+                            <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +45,7 @@
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer'>
                         <div>
-                            <p class='removeWhenFilled'>Drag Mechs Here</p>
+                            <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +58,7 @@
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer'>
                         <div>
-                            <p class='removeWhenFilled'>Drag Mechs Here</p>
+                            <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
@@ -70,7 +71,7 @@
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer'>
                         <div>
-                            <p class='removeWhenFilled'>Drag Mechs Here</p>
+                            <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
@@ -134,6 +135,10 @@
             <!-- Individual mechs here - content replace from javascript -->
             
         </div>
+        
+        <!-- PDF view -->
+        <div id='myPDF'></div>
+        
     </body>
     
     <script>
@@ -159,11 +164,39 @@
                     
                     $('#checkBox_' + mechID).data(mechStats);
                     $('#mechStats_' + mechID).data(mechStats);
-                    
-                    console.log($('#checkBox_' + mechID).data());
-                    console.log($('#mechStats_' + mechID).data());
                 }
+                
+                pillBoxHandlers();
             });
+            
+            
+            function pillBoxHandlers() {
+                
+                $('#unCheckAll').click(function() {
+                    $('.mechTitle input:checkbox').each(function() {   
+                        $(this).prop('checked', false);
+                    })
+                });
+                
+                //$('#myPDF').empty();
+                
+                $('.mechBox').dblclick(function() {
+                    var mechDetails = $(this).children('.mechStats').data();
+                    var mechID = mechDetails['_id'];
+                    console.log(mechID);
+                    
+                    var myPDF = new PDFObject({
+                        url: 'phpScripts/getPDF.php?mechID=' + mechID,
+                        id: "myPDF2",
+                        width: "1000px",
+                        height: "6800px",
+                        pdfOpenParams: { pagemode: 'none', scrollbars: '0', toolbar: '0', statusbar: '0', messages: '0', navpanes: '0' }
+                    }).embed('myPDF');
+                    
+                });
+            }
+            
+            
         })
     </script>
 </html>
