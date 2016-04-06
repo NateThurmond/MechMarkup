@@ -86,6 +86,9 @@
             
         </div>
         
+        <!-- PDF view -->
+        <div id='myPDF'>asd</div>
+        
         <!-- Main controls -->
         <div id="mainControls">
             
@@ -136,9 +139,6 @@
             
         </div>
         
-        <!-- PDF view -->
-        <div id='myPDF'></div>
-        
     </body>
     
     <script>
@@ -185,12 +185,21 @@
                     var mechID = mechDetails['_id'];
                     console.log(mechID);
                     
+                    $('#myPDF').css('display', 'block');
+                    $('#myPDF').css('width', '100%');
+                    $('#myPDF').css('height', '100%');
+                    
                     var myPDF = new PDFObject({
                         url: 'phpScripts/getPDF.php?mechID=' + mechID,
                         id: "myPDF2",
-                        width: "1000px",
-                        height: "6800px",
-                        pdfOpenParams: { pagemode: 'none', scrollbars: '0', toolbar: '0', statusbar: '0', messages: '0', navpanes: '0' }
+                        width: '800px',
+                        height: '1015px',
+                        pdfOpenParams: {
+                          navpanes: 0,
+                          statusbar: 0,
+                          view: "FitV",
+                          pagemode: "thumbs"
+                        }
                     }).embed('myPDF');
                     
                 });

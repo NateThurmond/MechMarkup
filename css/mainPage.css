@@ -319,3 +319,11 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+#myPDF {
+    display: none;
+    position: absolute;
+    z-index: 30;
+    min-width: 100%;
+    min-height: 500px;
+}
