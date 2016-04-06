@@ -2,11 +2,12 @@
 <html>
     <head>
         <title>Mech Markup</title>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="icon" href="images/mechIcon.png">
         <link rel="stylesheet" href="css/mainPage.css" type="text/css" charset="utf-8" >
         
         <script src="js/jquery-1.12.2.min.js"></script>
-        <script src="js/pdfobject.js"></script>
     </head>
     <body>
         
@@ -87,7 +88,7 @@
         </div>
         
         <!-- PDF view -->
-        <div id='myPDF'>asd</div>
+        <div id='myPDF'></div>
         
         <!-- Main controls -->
         <div id="mainControls">
@@ -177,30 +178,23 @@
                         $(this).prop('checked', false);
                     })
                 });
+
                 
-                //$('#myPDF').empty();
-                
-                $('.mechBox').dblclick(function() {
+                $('.mechBox').click(function() {
                     var mechDetails = $(this).children('.mechStats').data();
                     var mechID = mechDetails['_id'];
                     console.log(mechID);
                     
+                    var heightToStretch = window.innerHeight - $('#menuBar').height();
+                    console.log(heightToStretch);
+                    $('#myPDF').css('min-height', heightToStretch + 'px');
                     $('#myPDF').css('display', 'block');
-                    $('#myPDF').css('width', '100%');
-                    $('#myPDF').css('height', '100%');
+                    $('#myPDF').css('background-color', '#DFE2DB');
+                        
+                    var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
+                    //$('#myPDF').css('background-image', 'url(' + imageRef + ')');
                     
-                    var myPDF = new PDFObject({
-                        url: 'phpScripts/getPDF.php?mechID=' + mechID,
-                        id: "myPDF2",
-                        width: '800px',
-                        height: '1015px',
-                        pdfOpenParams: {
-                          navpanes: 0,
-                          statusbar: 0,
-                          view: "FitV",
-                          pagemode: "thumbs"
-                        }
-                    }).embed('myPDF');
+                    $('#myPDF').css('background-image', 'url(' + imageRef + ')');
                     
                 });
             }

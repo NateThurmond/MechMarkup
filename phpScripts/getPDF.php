@@ -7,21 +7,21 @@ if (isset($_GET['mechID'])) {
     $mechID = (string)$_GET['mechID'];
     
     $mongoOps = new mongoOps();
-    $cursor = $mongoOps->find('{"refID":"' . $mechID . '"}', '{"pdf":1}', 'MONGO_COLL_PDFS');
+    $cursor = $mongoOps->find('{"refID":"' . $mechID . '"}', '{"image":1}', 'MONGO_COLL_PDFS');
     $finalReturns = $mongoOps->objFromCursor($cursor);
     
     //echo json_encode($finalReturns);
     
     foreach((array)$finalReturns as $ind => $val) {
         
-        $pdf = $val['pdf'];
-        $pdf_decoded = base64_decode ($pdf);
+        $image = $val['image'];
+        $image_decoded = base64_decode ($image);
         
-        header('Content-type: application/pdf');
+        header('Content-type: image/jpeg');
         header('Content-Disposition: inline; filename="' . $mechID . '"');
         header('Content-Transfer-Encoding: binary');
         header('Accept-Ranges: bytes');
-        echo $pdf_decoded;
+        echo $image_decoded;
     }
 }
 

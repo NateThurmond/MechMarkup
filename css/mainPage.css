@@ -321,6 +321,9 @@ body {
 }
 
 #myPDF {
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
     display: none;
     position: absolute;
     z-index: 30;
