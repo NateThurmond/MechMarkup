@@ -89,7 +89,11 @@
         
         <!-- PDF view -->
         <div id='preview'>
-            <div id='previewControls'></div>
+            <div id='previewControls'>
+                <button id="closePreview">Close</button>
+                <button id="nextMech">Next</button>
+            </div>
+            <div id='previewImage'></div>
         </div>
         
         <!-- Main controls -->
@@ -186,32 +190,87 @@
                     var mechDetails = $(this).children('.mechStats').data();
                     var mechID = mechDetails['_id'];
                     
-                    // default page ratio for pdf is 215.9 mm x 279.4 mm  -  0.7727272727272727
-                    //    1.294117647058824
-                    
-                    var heightToStretch = window.innerHeight - $('#menuBar').height() - 55;
-                    var widthToStretch = $('body').width();
-                    var aspectRatio = (widthToStretch / heightToStretch);
-                    
-                    if (aspectRatio < 0.7727) {
-                        heightToStretch = (widthToStretch * 1.294) - 55;
-                    }
-                    
-                    $('#preview').css('min-height', heightToStretch + 'px');
-                    $('#preview').css('max-height', heightToStretch + 'px');
-                    
-                    $('#preview').css('min-width', widthToStretch + 'px');
-                    $('#preview').css('max-width', widthToStretch + 'px');
-                    
-                    $('#preview').css('display', 'block');
-                    $('#preview').css('background-color', '#DFE2DB');
-                        
-                    var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
-
-                    $('#preview').css('background-image', 'url(' + imageRef + ')');
+                    resizePreview(mechID);
+                });
                 
+                $('#closePreview').click(function() {
+                    
+                    $('#previewImage').removeData();
+                    
+                    $('#preview').css('display', 'none');
+                    $('#preview').css('height', '100px');
+                    $('#preview').css('width', '100px');
+                    $('#previewImage').css('margin-top', '0px');
+                });
+                
+                $('#nextMech').click(function() {
+                    var currentMechID = $('#previewImage').data('refID');
+                    var foundMech = false;
+                    var nextMechID = "";
+                    
+                    $('.mechBox:visible').each(function() {
+                        if (foundMech) {
+                            nextMechID = $(this).children('.mechTitle').find(':checkbox').data('_id');
+                            var imageRef = 'phpScripts/getPDF.php?mechID=' + nextMechID;
+                            $('#previewImage').css('background-image', 'url(' + imageRef + ')');
+                            return false;
+                        }
+                        else {
+                            var searchMechID = $(this).children('.mechTitle').find(':checkbox').data('_id');
+                            if (currentMechID == searchMechID) {
+                                foundMech = true;
+                            }
+                        }
+                    });
                 });
             }
+            
+            
+            function resizePreview(mechID) {
+                // default page ratio for pdf is 215.9 mm x 279.4 mm  -  0.7727272727272727
+                //    1.294117647058824
+                var previewData = {"refID":mechID};
+                $('#preview').css('height', '100px');
+                $('#preview').css('width', '100px');
+                $('#previewImage').css('margin-top', '0px');
+                
+                var heightToStretch = $(window).height() - $('#menuBar').height() - 5;
+                var widthToStretch = $('body').width();
+                var aspectRatio = (widthToStretch / heightToStretch);
+                
+                if (aspectRatio < 0.7727) {
+                    var heightToStretchNew = (widthToStretch * 1.294) - 5;
+                    var heightDiff = ((heightToStretch - heightToStretchNew) / 2) - 5;
+                    heightToStretch = heightToStretchNew;
+                }
+                
+                $('#preview').css('min-height', heightToStretch + 'px');
+                $('#preview').css('max-height', heightToStretch + 'px');
+                $('#preview').css('min-width', widthToStretch + 'px');
+                $('#preview').css('max-width', widthToStretch + 'px');
+                $('#preview').css('display', 'block');
+                $('#preview').css('background-color', '#DFE2DB');
+                
+                $('#previewImage').css('min-height', heightToStretch - 50 + 'px');
+                $('#previewImage').css('max-height', heightToStretch - 50 + 'px');
+                $('#previewImage').css('min-width', widthToStretch + 'px');
+                $('#previewImage').css('max-width', widthToStretch + 'px');
+                $('#previewImage').css('display', 'block');
+                $('#previewImage').css('background-color', '#DFE2DB');
+                $('#previewImage').css('margin-top', heightDiff + 'px');
+                    
+                var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
+
+                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
+                $('#previewImage').data(previewData);
+            }
+            
+            
+            window.addEventListener("resize", function() {
+                if ($('#preview').css('display') == "block") {
+                    resizePreview($('#previewImage').data('refID'));
+                }
+            }, false);
             
             
         })

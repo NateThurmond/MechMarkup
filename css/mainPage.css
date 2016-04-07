@@ -4,31 +4,16 @@
     Description: Main style sheet for MechMarkup site
 */
 
-/*@font-face {
-    font-family: 'mainframe_bbbold';
-    src: url('../fonts/mainbb__-webfont.eot');
-    src: url('../fonts/mainbb__-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/mainbb__-webfont.woff2') format('woff2'),
-         url('../fonts/mainbb__-webfont.woff') format('woff'),
-         url('../fonts/mainbb__-webfont.ttf') format('truetype'),
-         url('../fonts/mainbb__-webfont.svg#mainframe_bbbold') format('svg');
-}
-
-@font-face {
-    font-family: 'neuropol';
-    src: url('../fonts/neuropol x rg.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'ROBOTECH';
-    src: url('../fonts/ROBOTECH GP.ttf') format('truetype');
-}*/
 
 @font-face {
     font-family: 'zekton';
-    src: url('../fonts/zekton rg.ttf') format('truetype');
+    src: url('../fonts/zekton_rg-webfont.eot');
+    src: url('../fonts/zekton_rg-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/zekton_rg-webfont.woff2') format('woff2'),
+         url('../fonts/zekton_rg-webfont.woff') format('woff'),
+         url('../fonts/zekton_rg-webfont.ttf') format('truetype'),
+         url('../fonts/zekton_rg-webfont.svg#zektonregular') format('svg');
 }
-
 
 html, body {
     margin: 0px 0px 0px 0px;
@@ -106,7 +91,7 @@ body {
 }
 
 #filterControls input {
-    width: 13%;
+    width: 11%;
 }
 
 #unCheckAll {
@@ -239,7 +224,7 @@ body {
 }
 
 #allMechs div div p {
-    font-size: 28px;
+    font-size: 27px;
 }
 
 .filled {
@@ -297,6 +282,7 @@ body {
 }
 
 .mechStats div {
+    max-height: 20px;
     text-align: left;
     display: block;
     width: 100%;
@@ -311,28 +297,21 @@ body {
 
 .mechStats div p {
     vertical-align: bottom;
-    max-width: 62%;
+    max-width: 60%;
     display: inline-block;
     font-size: 10px;
     margin: 2px 0px 2px 5px;
-    overflow: hidden;pre
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 #preview {
-    margin 0px 0px 0px 0px;
-    //border: 10px solid red;
+    margin: 0px 0px 0px 0px;
     min-width: 100%;
-    background-position: center, center;
-    
-    background-size: auto 100%;
-    background-repeat: no-repeat;
-    //background-position: center;
     display: none;
     position: absolute;
     z-index: 30;
-    //min-width: 100%;
     min-height: 500px;
 }
 
@@ -340,5 +319,16 @@ body {
     min-height: 50px;
     max-height: 50px;
     width: 100%;
-    background-color: black;
+    background-color: #556177;
+    background: linear-gradient(#191919, #556177);
+}
+
+#previewImage {
+    margin: 0px 0px 0px 0px;
+    min-width: 100%;
+    background-position: center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    display: none;
+    min-height: 500px;
 }
