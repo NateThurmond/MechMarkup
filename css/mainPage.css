@@ -315,18 +315,30 @@ body {
     display: inline-block;
     font-size: 10px;
     margin: 2px 0px 2px 5px;
-    overflow: hidden;
+    overflow: hidden;pre
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-#myPDF {
+#preview {
+    margin 0px 0px 0px 0px;
+    //border: 10px solid red;
+    min-width: 100%;
+    background-position: center, center;
+    
     background-size: auto 100%;
     background-repeat: no-repeat;
-    background-position: center;
+    //background-position: center;
     display: none;
     position: absolute;
     z-index: 30;
-    min-width: 100%;
+    //min-width: 100%;
     min-height: 500px;
+}
+
+#previewControls {
+    min-height: 50px;
+    max-height: 50px;
+    width: 100%;
+    background-color: black;
 }

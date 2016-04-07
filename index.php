@@ -88,7 +88,9 @@
         </div>
         
         <!-- PDF view -->
-        <div id='myPDF'></div>
+        <div id='preview'>
+            <div id='previewControls'></div>
+        </div>
         
         <!-- Main controls -->
         <div id="mainControls">
@@ -183,19 +185,31 @@
                 $('.mechBox').click(function() {
                     var mechDetails = $(this).children('.mechStats').data();
                     var mechID = mechDetails['_id'];
-                    console.log(mechID);
                     
-                    var heightToStretch = window.innerHeight - $('#menuBar').height();
-                    console.log(heightToStretch);
-                    $('#myPDF').css('min-height', heightToStretch + 'px');
-                    $('#myPDF').css('display', 'block');
-                    $('#myPDF').css('background-color', '#DFE2DB');
+                    // default page ratio for pdf is 215.9 mm x 279.4 mm  -  0.7727272727272727
+                    //    1.294117647058824
+                    
+                    var heightToStretch = window.innerHeight - $('#menuBar').height() - 55;
+                    var widthToStretch = $('body').width();
+                    var aspectRatio = (widthToStretch / heightToStretch);
+                    
+                    if (aspectRatio < 0.7727) {
+                        heightToStretch = (widthToStretch * 1.294) - 55;
+                    }
+                    
+                    $('#preview').css('min-height', heightToStretch + 'px');
+                    $('#preview').css('max-height', heightToStretch + 'px');
+                    
+                    $('#preview').css('min-width', widthToStretch + 'px');
+                    $('#preview').css('max-width', widthToStretch + 'px');
+                    
+                    $('#preview').css('display', 'block');
+                    $('#preview').css('background-color', '#DFE2DB');
                         
                     var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
-                    //$('#myPDF').css('background-image', 'url(' + imageRef + ')');
-                    
-                    $('#myPDF').css('background-image', 'url(' + imageRef + ')');
-                    
+
+                    $('#preview').css('background-image', 'url(' + imageRef + ')');
+                
                 });
             }
             
