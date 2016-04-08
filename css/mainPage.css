@@ -23,6 +23,14 @@ body {
     background-color: #DFE2DB;
 }
 
+body * > {
+    -user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
 #menuBar {
     width: 100%;
     height: 110px;
@@ -85,19 +93,33 @@ body {
     margin: 0px 0px 6px 0px;
 }
 
-#sortBy select, #filterControls input {
+#sortBy select {
+    margin-bottom: 5px;
     font-family: zekton, sans-serif;
     display: inline-block;
+    height: 23px;
+    font-size: 18px;
+    width: 80%;
 }
 
 #filterControls input {
-    width: 11%;
+    margin-top: 8px;
+    font-family: zekton, sans-serif;
+    display: inline-block;
+    height: 23px;
+    font-size: 18px;
+}
+
+#filterControls input {
+    width: 10%;
 }
 
 #unCheckAll {
+    font-size: 18px;
     width: 90%;
+    height: 92%;
     font-family: zekton, sans-serif;
-    margin-top: 21px;
+    margin-top: 2%;
     margin-left: 2%;
 }
 
@@ -241,10 +263,10 @@ body {
     border-radius: 10px;
     text-align: center;
     font-family: zekton, sans-serif;
-    margin: 1% 1% 1% 3%;
+    margin: 2% 1% 2% 3%;
     display: inline-block;
     height: 160px;
-    width: 20%;
+    width: 28.5%;
     background-color: #8592A8;
     background: linear-gradient(#8592A8, #5f6e86);
 }
@@ -258,19 +280,20 @@ body {
 .mechStats {
     margin-top: 2px;
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 .mechTitle input {
-    width: 10%;
+    height: 90%;
+    min-width: 10%;
     height: 26px;
     display: inline-block;
 }
 
 .mechTitle h5 {
     position: relative;
-    bottom: 5px;
-    font-size: 10px;
+    bottom: 2.5px;
+    font-size: 18px;
     padding-right: 5%;
     width: 75%;
     margin: 0px 0px 0px 0px;
@@ -290,20 +313,39 @@ body {
 
 .mechStats div label {
     display: inline-block;
-    font-size: 10px;
+    font-size: 17px;
     margin: 1px 0px 2px 5px;
     font-weight: bold;
+}
+
+.mechWalk, .mechRun, .mechJump {
+    display: none !important;
 }
 
 .mechStats div p {
     vertical-align: bottom;
     max-width: 60%;
     display: inline-block;
-    font-size: 10px;
+    font-size: 17px;
     margin: 2px 0px 2px 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.mechWeapons {
+    height: 46px !important;
+    max-height: 46px !important;
+}
+
+.mechWeapons label {
+    display: block !important;
+}
+
+.mechWeapons p {
+    width: 90% !important;
+    max-width: 90% !important;
+    
 }
 
 #preview {
