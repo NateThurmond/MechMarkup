@@ -36,6 +36,14 @@ class mongoOps {
         return $cursor;
     }
     
+    public function insert($command, $COLL) {
+        
+        $collToInsert = $this->DB->selectCollection($this->$COLL);
+        $collToInsert->insert($command);
+        
+        return $command;
+    }
+    
     public function objFromCursor($cursor) {
         
         $finalReturns = new stdClass();

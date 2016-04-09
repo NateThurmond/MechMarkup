@@ -25,7 +25,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="selectPage"></div>-->
             </div>
             
             <!-- View 1 -->
@@ -103,7 +102,7 @@
                 <!--<h5>Sort By</h5>-->
                 <select id="sortKey">
                     <option>Name</option>
-                    <option>Weight</option>
+                    <option>Tonnage</option>
                     <option>Walk</option>
                     <option>Run</option>
                     <option>Jump</option>
@@ -192,32 +191,42 @@
                         var mechCounter = $(this).find('p').length;
                     }
                     
-                    if (mechCounter == 5) {
-                        alert('Only 5 mechs per view, remove other mechs to add to this view.');
-                    }
-                    else {
-                        $('.mechBox:visible').each(function() {
-                            
-                            var mechChecked = $(this).find('input:checkbox:checked').prop('checked');
-                            var mechData = $(this).find('input:checkbox:checked').data();
-                            
-                            if ((mechChecked) && (mechCounter < 5)) {
-                                if (mechCounter == 0) {
-                                    $('#' + viewID).find('div p').remove();
-                                }
-                                $('#' + viewID + ' div').append('<p id="viewMech_' + mechData['_id']
-                                    + '" class="viewMech">' + mechData['mechName'] + '</p>');
-                                
-                                $('#viewMech_' + mechData['_id']).data(mechData);
-                                
-                                mechCounter++;
+                    $('.mechBox:visible').each(function() {
+                        
+                        var mechChecked = $(this).find('input:checkbox:checked').prop('checked');
+                        var mechData = $(this).find('input:checkbox:checked').data();
+                        
+                        if ((mechChecked) && (mechCounter < 5)) {
+                            if (mechCounter == 0) {
+                                $('#' + viewID).find('div p').remove();
                             }
-                            else if (mechCounter == 5) {
-                                alert('Maximum Number of mechs added to this view');
-                                return 0;
-                            }
-                        });
+                            $('#' + viewID + ' div').append('<p class="viewMech" id="viewMech_' + mechData['_id']
+                                + '" class="viewMech"><strong class="viewMechRemove">&nbsp</strong>' + mechData['mechName'] + '</p>');
+                            
+                            $('#viewMech_' + mechData['_id']).data(mechData);
+                            
+                            mechCounter++;
+                        }
+                    });
+                });
+                
+                $('#sortKey, #sortOrder').change(function() {
+                    var sortKeyOption = $(this).find(":selected").text().toLowerCase();
+                    var sortOrder = $('#sortOrder').find(":selected").text();
+                    if (sortKeyOption == "name") {
+                        sortKeyOption = "mechName";
                     }
+                    
+                    var elementsToSort = {};
+                    
+                    $('.mechBox').each(function() {
+                        var mechData = $(this).find('input:checkbox').data();
+                        //console.log(mechData);
+                        elementsToSort[mechData[sortKeyOption]] = mechData['_id'];
+                    });
+                    
+                    orderKeys(elementsToSort);
+                    console.log(elementsToSort);
                 });
                 
                 $('#unCheckAll').click(function() {
@@ -342,6 +351,26 @@
             }, false);
             
             
-        })
+            function orderKeys(obj, expected) {
+                var keys = Object.keys(obj).sort(function keyOrder(k1, k2) {
+                    if (k1 < k2) return -1;
+                    else if (k1 > k2) return +1;
+                    else return 0;
+                });
+              
+                var i, after = {};
+                for (i = 0; i < keys.length; i++) {
+                    after[keys[i]] = obj[keys[i]];
+                    delete obj[keys[i]];
+                }
+              
+                for (i = 0; i < keys.length; i++) {
+                    obj[keys[i]] = after[keys[i]];
+                }
+                return obj;
+            }
+            
+            
+        });
     </script>
 </html>
