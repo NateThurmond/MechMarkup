@@ -25,59 +25,55 @@
                         </div>
                     </div>
                 </div>
-                <div class="pageIndicator"><div class="arrow-down filledArrow"></div></div>
+                <!--<div class="selectPage"></div>-->
             </div>
             
             <!-- View 1 -->
             <div class="tabContainer">
                 <div class="viewTitle">View 1</div>
                 <div class='menuBarTabs notfilled'>
-                    <div class='menuBarTabsContainer'>
+                    <div class='menuBarTabsContainer menuBarView' id='view1'>
                         <div>
                             <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
-                <div class="pageIndicator"><div class="arrow-down"></div></div>
             </div>
             
             <!-- View 2 -->
             <div class="tabContainer">
                 <div class="viewTitle">View 2</div>
                 <div class='menuBarTabs notfilled'>
-                    <div class='menuBarTabsContainer'>
+                    <div class='menuBarTabsContainer menuBarView' id='view2'>
                         <div>
                             <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
-                <div class="pageIndicator"><div class="arrow-down"></div></div>
             </div>
             
             <!-- View 3 -->
             <div class="tabContainer">
                 <div class="viewTitle">View 3</div>
                 <div class='menuBarTabs notfilled'>
-                    <div class='menuBarTabsContainer'>
+                    <div class='menuBarTabsContainer menuBarView' id='view3'>
                         <div>
                             <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
-                <div class="pageIndicator"><div class="arrow-down"></div></div>
             </div>
             
             <!-- View 4 -->
             <div class="tabContainer">
                 <div class="viewTitle">View 4</div>
                 <div class='menuBarTabs notfilled'>
-                    <div class='menuBarTabsContainer'>
+                    <div class='menuBarTabsContainer menuBarView' id='view4'>
                         <div>
                             <p class='removeWhenFilled'>Click to add</p>
                         </div>
                     </div>
                 </div>
-                <div class="pageIndicator"><div class="arrow-down"></div></div>
             </div>
             
             <!-- Upload -->
@@ -183,6 +179,46 @@
             
             
             function pillBoxHandlers() {
+                
+                $('.menuBarView').click(function() {
+                    
+                    var viewID = this.id;
+                    var viewNum = viewID.substr(viewID.length - 1);
+                    
+                    if ($(this).find('p').hasClass('removeWhenFilled')) {
+                        var mechCounter = 0;
+                    }
+                    else {
+                        var mechCounter = $(this).find('p').length;
+                    }
+                    
+                    if (mechCounter == 5) {
+                        alert('Only 5 mechs per view, remove other mechs to add to this view.');
+                    }
+                    else {
+                        $('.mechBox:visible').each(function() {
+                            
+                            var mechChecked = $(this).find('input:checkbox:checked').prop('checked');
+                            var mechData = $(this).find('input:checkbox:checked').data();
+                            
+                            if ((mechChecked) && (mechCounter < 5)) {
+                                if (mechCounter == 0) {
+                                    $('#' + viewID).find('div p').remove();
+                                }
+                                $('#' + viewID + ' div').append('<p id="viewMech_' + mechData['_id']
+                                    + '" class="viewMech">' + mechData['mechName'] + '</p>');
+                                
+                                $('#viewMech_' + mechData['_id']).data(mechData);
+                                
+                                mechCounter++;
+                            }
+                            else if (mechCounter == 5) {
+                                alert('Maximum Number of mechs added to this view');
+                                return 0;
+                            }
+                        });
+                    }
+                });
                 
                 $('#unCheckAll').click(function() {
                     $('.mechTitle input:checkbox').each(function() {   
