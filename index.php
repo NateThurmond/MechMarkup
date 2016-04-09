@@ -149,6 +149,11 @@
     <script>
         $(document).ready(function() {
             
+            // Link to Upload page
+            $('#uploadImage').click(function() {
+                window.location='upload.php';
+            });
+            
             $.getJSON('phpScripts/getAllMechs.php', function(allMechs) {
 
                 
@@ -368,7 +373,7 @@
                     obj[keys[i]] = after[keys[i]];
                 }
                 return obj;
-            }
+            };
             
             
         });
