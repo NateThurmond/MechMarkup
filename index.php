@@ -216,22 +216,43 @@
                 });
                 
                 $('#sortKey, #sortOrder').change(function() {
-                    var sortKeyOption = $(this).find(":selected").text().toLowerCase();
+                    var sortKeyOption = $('#sortKey').find(":selected").text().toLowerCase();
                     var sortOrder = $('#sortOrder').find(":selected").text();
                     if (sortKeyOption == "name") {
                         sortKeyOption = "mechName";
                     }
                     
-                    var elementsToSort = {};
+                    var elementsToSort = [];
                     
                     $('.mechBox').each(function() {
                         var mechData = $(this).find('input:checkbox').data();
-                        //console.log(mechData);
-                        elementsToSort[mechData[sortKeyOption]] = mechData['_id'];
+                        elementsToSort.push(mechData[sortKeyOption] + "__" + mechData['_id']);
                     });
                     
-                    orderKeys(elementsToSort);
-                    console.log(elementsToSort);
+                    function sortNumber(a,b) {
+                        a = a.split("__")[0];
+                        b = b.split("__")[0];
+                        return a - b;
+                    }
+                    
+                    if (sortKeyOption == "mechName") {
+                        elementsToSort.sort();
+                    }
+                    else {
+                        elementsToSort.sort(sortNumber);
+                    }
+                    
+                    if (sortOrder == "Desc") {
+                        elementsToSort.reverse();
+                    }
+                    
+                    for (sortKey in elementsToSort) {
+                        var mechID = elementsToSort[sortKey].split("__")[1];
+                        
+                        var cloneElement = $('#mechBox_' + mechID).clone(true, true);
+                        $('#mechBox_' + mechID).remove();
+                        $('#mechListings').append(cloneElement);
+                    }
                 });
                 
                 $('#unCheckAll').click(function() {
@@ -354,26 +375,6 @@
                     resizePreview($('#previewImage').data('refID'));
                 }
             }, false);
-            
-            
-            function orderKeys(obj, expected) {
-                var keys = Object.keys(obj).sort(function keyOrder(k1, k2) {
-                    if (k1 < k2) return -1;
-                    else if (k1 > k2) return +1;
-                    else return 0;
-                });
-              
-                var i, after = {};
-                for (i = 0; i < keys.length; i++) {
-                    after[keys[i]] = obj[keys[i]];
-                    delete obj[keys[i]];
-                }
-              
-                for (i = 0; i < keys.length; i++) {
-                    obj[keys[i]] = after[keys[i]];
-                }
-                return obj;
-            };
             
             
         });
