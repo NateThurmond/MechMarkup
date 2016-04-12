@@ -86,10 +86,16 @@
         <!-- PDF view -->
         <div id='preview'>
             <div id='previewControls'>
-                <button id="closePreview">Close</button>
-                <button id="prevMech">Prev</button>
-                <button id="nextMech">Next</button>
-                <input id="previewCheck" type="checkbox" />
+                <div id='controlLeft'>
+                    <div id="closePreview"></div>
+                </div>
+                <div id='controlCenter'>
+                    <div id="prevMech"></div>
+                    <button id="nextMech"></button>
+                </div>
+                <div id='controlRight'>
+                    
+                </div>
             </div>
             <div id='previewImage'></div>
         </div>
@@ -184,35 +190,49 @@
             
             function pillBoxHandlers() {
                 
-                $('.menuBarView').click(function() {
+                $('.menuBarView').click(function(e) {
+                    var classArr = e.target.classList;
                     
                     var viewID = this.id;
                     var viewNum = viewID.substr(viewID.length - 1);
-                    
-                    if ($(this).find('p').hasClass('removeWhenFilled')) {
-                        var mechCounter = 0;
+
+                    if ($.inArray( 'viewMechRemove', classArr) == -1) {
+                        
+                        if ($(this).find('p').hasClass('removeWhenFilled')) {
+                            var mechCounter = 0;
+                        }
+                        else {
+                            var mechCounter = $(this).find('p').length;
+                        }
+                        
+                        $('.mechBox:visible').each(function() {
+                            
+                            var mechChecked = $(this).find('input:checkbox:checked').prop('checked');
+                            var mechData = $(this).find('input:checkbox:checked').data();
+                            
+                            if ((mechChecked) && (mechCounter < 5)) {
+                                if (mechCounter == 0) {
+                                    $('#' + viewID).find('div p').remove();
+                                }
+                                $('#' + viewID + ' div').append('<p class="viewMech" id="viewMech_' + viewNum + '_' + mechData['_id']
+                                    + '" class="viewMech"><strong class="viewMechRemove" id="viewMechRemove_'
+                                    + mechData['_id'] + '" >&nbsp</strong>' + mechData['mechName'] + '</p>');
+                                
+                                $('#viewMech_' + mechData['_id']).data(mechData);
+                                
+                                mechCounter++;
+                            }
+                        });
                     }
                     else {
-                        var mechCounter = $(this).find('p').length;
-                    }
-                    
-                    $('.mechBox:visible').each(function() {
-                        
-                        var mechChecked = $(this).find('input:checkbox:checked').prop('checked');
-                        var mechData = $(this).find('input:checkbox:checked').data();
-                        
-                        if ((mechChecked) && (mechCounter < 5)) {
-                            if (mechCounter == 0) {
-                                $('#' + viewID).find('div p').remove();
-                            }
-                            $('#' + viewID + ' div').append('<p class="viewMech" id="viewMech_' + mechData['_id']
-                                + '" class="viewMech"><strong class="viewMechRemove">&nbsp</strong>' + mechData['mechName'] + '</p>');
-                            
-                            $('#viewMech_' + mechData['_id']).data(mechData);
-                            
-                            mechCounter++;
+                        var removeTag = e.target.id;
+                        removeTag = removeTag.replace('viewMechRemove_', '');
+                        $('#viewMech_' + viewNum + '_' + removeTag).remove();
+                        var elemCount = $('#' + viewID + ' div p').length;
+                        if (elemCount == 0) {
+                            $('#' + viewID + ' div').append('<p class="removeWhenFilled">Click to add</p>');
                         }
-                    });
+                    }
                 });
                 
                 $('#sortKey, #sortOrder').change(function() {
@@ -260,11 +280,6 @@
                         $(this).prop('checked', false);
                     })
                 });
-
-                $('#previewCheck').click(function() {
-                    var currentMechID = $('#previewImage').data('refID');
-                    $('#checkBox_' + currentMechID).prop('checked', $(this).prop('checked'));
-                });
                 
                 $('.mechStats').click(function() {
                     var mechDetails = $(this).data();
@@ -291,14 +306,12 @@
                         var imageRef = 'phpScripts/getPDF.php?mechID=' + nextMechID;
                         $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                         $('#previewImage').data('refID', nextMechID);
-                        $('#previewCheck').prop('checked', getMechCheckValue(nextMechID));
                     }
                     else {
                         var firstMechID = $('.mechBox:visible:first').children('.mechTitle').find(':checkbox').data('_id');
                         var imageRef = 'phpScripts/getPDF.php?mechID=' + firstMechID;
                         $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                         $('#previewImage').data('refID', firstMechID);
-                        $('#previewCheck').prop('checked', getMechCheckValue(firstMechID));
                     }
                 });
                 
@@ -311,14 +324,12 @@
                         var imageRef = 'phpScripts/getPDF.php?mechID=' + prevMechID;
                         $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                         $('#previewImage').data('refID', prevMechID);
-                        $('#previewCheck').prop('checked', getMechCheckValue(prevMechID));
                     }
                     else {
                         var lastMechID = $('.mechBox:visible:last').children('.mechTitle').find(':checkbox').data('_id');
                         var imageRef = 'phpScripts/getPDF.php?mechID=' + lastMechID;
                         $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                         $('#previewImage').data('refID', lastMechID);
-                        $('#previewCheck').prop('checked', getMechCheckValue(lastMechID));
                     }
                 });
             }
@@ -331,7 +342,6 @@
                 $('#preview').css('height', '100px');
                 $('#preview').css('width', '100px');
                 $('#previewImage').css('margin-top', '0px');
-                $('#previewCheck').prop('checked', getMechCheckValue(mechID));
                 
                 var heightToStretch = $(window).height() - $('#menuBar').height() - 5;
                 var widthToStretch = $('body').width();
