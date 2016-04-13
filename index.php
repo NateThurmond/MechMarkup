@@ -195,15 +195,37 @@
                     
                     var viewID = this.id;
                     var viewNum = viewID.substr(viewID.length - 1);
+                    var mechCounter = 0;
+                    
+                    if (! $(this).find('p').hasClass('removeWhenFilled')) {
+                        var mechCounter = $(this).find('p').length;
+                    }
 
-                    if ($.inArray( 'viewMechRemove', classArr) == -1) {
+                    if ($.inArray( 'viewMechRemove', classArr) >= 0) {
+                        var removeTag = e.target.id;
+                        removeTag = removeTag.replace('viewMechRemove_', '');
+                        $('#viewMech_' + viewNum + '_' + removeTag).remove();
+                        var elemCount = $('#' + viewID + ' div p').length;
+                        if (elemCount == 0) {
+                            $('#' + viewID + ' div').append('<p class="removeWhenFilled">Click to add</p>');
+                        }
+                    }                    
+                    else if ($('#preview').is(":visible")) {
+                        var mechID = $('#previewImage').data('refID');
+                        var mechData = $('#checkBox_' + mechID).data();
                         
-                        if ($(this).find('p').hasClass('removeWhenFilled')) {
-                            var mechCounter = 0;
+                        if (mechCounter < 5) {
+                            if (mechCounter == 0) {
+                                $('#' + viewID).find('div p').remove();
+                            }
+                            $('#' + viewID + ' div').append('<p class="viewMech" id="viewMech_' + viewNum + '_' + mechData['_id']
+                                + '" class="viewMech"><strong class="viewMechRemove" id="viewMechRemove_'
+                                + mechData['_id'] + '" >&nbsp</strong>' + mechData['mechName'] + '</p>');
+                            
+                            $('#viewMech_' + mechData['_id']).data(mechData);
                         }
-                        else {
-                            var mechCounter = $(this).find('p').length;
-                        }
+                    }
+                    else if ($.inArray( 'viewMechRemove', classArr) == -1) {
                         
                         $('.mechBox:visible').each(function() {
                             
@@ -223,15 +245,6 @@
                                 mechCounter++;
                             }
                         });
-                    }
-                    else {
-                        var removeTag = e.target.id;
-                        removeTag = removeTag.replace('viewMechRemove_', '');
-                        $('#viewMech_' + viewNum + '_' + removeTag).remove();
-                        var elemCount = $('#' + viewID + ' div p').length;
-                        if (elemCount == 0) {
-                            $('#' + viewID + ' div').append('<p class="removeWhenFilled">Click to add</p>');
-                        }
                     }
                 });
                 
@@ -289,6 +302,11 @@
                 
                 $('#closePreview').click(function() {
                     
+                    // Reset back to static for scrolling through listings
+                    $('#mechListings').css('position', 'static');
+                    $('#mechListings').css('display', 'block');
+                    $('#mechListings').css('margin-left', '7%');
+                    
                     $('#previewImage').removeData();
                     
                     $('#preview').css('display', 'none');
@@ -336,6 +354,12 @@
             
             
             function resizePreview(mechID) {
+                
+                // Reset to static to get correct portions for preview
+                $('#mechListings').css('position', 'static');
+                $('#mechListings').css('display', 'block');
+                $('#mechListings').css('margin-left', '7%');
+                
                 // default page ratio for pdf is 215.9 mm x 279.4 mm  -  0.7727272727272727
                 //    1.294117647058824
                 var previewData = {"refID":mechID};
@@ -343,15 +367,16 @@
                 $('#preview').css('width', '100px');
                 $('#previewImage').css('margin-top', '0px');
                 
-                var heightToStretch = $(window).height() - $('#menuBar').height() - 5;
+                var heightToStretch = $(window).height() - $('#menuBar').height() - 0;
                 var widthToStretch = $('body').width();
                 var aspectRatio = (widthToStretch / heightToStretch);
                 
                 if (aspectRatio < 0.7727) {
-                    var heightToStretchNew = (widthToStretch * 1.294) - 5;
-                    var heightDiff = ((heightToStretch - heightToStretchNew) / 2) - 5;
+                    var heightToStretchNew = (widthToStretch * 1.294) - 0;
+                    var heightDiff = ((heightToStretch - heightToStretchNew) / 2) - 0;
                     heightToStretch = heightToStretchNew;
                 }
+        
                 
                 $('#preview').css('min-height', heightToStretch + 'px');
                 $('#preview').css('max-height', heightToStretch + 'px');
@@ -372,6 +397,11 @@
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
                 $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                 $('#previewImage').data(previewData);
+                
+                // Needed to prevent scrolling through listings on preview screen
+                $('#mechListings').css('position', 'fixed');
+                $('#mechListings').css('display', 'fixed');
+                $('#mechListings').css('margin-left', '100%');
             }
             
             
