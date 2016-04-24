@@ -431,8 +431,27 @@ include('phpScripts/cookie.php');
             
             
             $('.viewTitle').click(function() {
+                
                 var linkID = this.id.split('_')[0];
-                location.replace(linkID + '.php');
+                
+                // Update the current markup for the view
+                var mycanvas = document.getElementById("canvas");
+                var image    = mycanvas.toDataURL("image/jpg");
+                var currentMech = (mechNumMod.mod(mechNumTotal)) + 1;
+                
+                updateMarkup(currentMech, image, function() {
+                    // get the prev mech background
+                    mechNumMod--;
+                    var prevMech = (mechNumMod.mod(mechNumTotal)) + 1;
+                    var imageRef = viewMechs[prevMech]['imageRef'];
+                    $('#canvas').css('background-image', 'url(' + imageRef + ')');
+                    
+                    // get the prev mech markup
+                    var ctx = document.getElementById("canvas").getContext("2d");
+                    fetchMarkup(pageNum, prevMech, ctx, mycanvas);
+                    
+                    location.replace(linkID + '.php');
+                });
             });
             
             
