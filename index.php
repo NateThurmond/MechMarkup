@@ -1,3 +1,9 @@
+<?php
+
+include('phpScripts/cookie.php');
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,6 +15,7 @@
         <link rel="stylesheet" href="css/mainPage.css" type="text/css" charset="utf-8" >
         
         <script src="js/jquery-1.12.2.min.js"></script>
+        <script src="js/jquery.touchSwipe.js"></script>
     </head>
     <body>
         
@@ -21,7 +28,7 @@
                 <div class='menuBarTabs filled' id='allMechs'>
                     <div class='menuBarTabsContainer'>
                         <div>
-                            <p>All Mechs</p>
+                            <p id="index">All Mechs</p>
                         </div>
                     </div>
                 </div>
@@ -29,7 +36,7 @@
             
             <!-- View 1 -->
             <div class="tabContainer">
-                <div class="viewTitle">View 1</div>
+                <div class="viewTitle" id="view1_">View 1</div>
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer menuBarView' id='view1'>
                         <div>
@@ -41,7 +48,7 @@
             
             <!-- View 2 -->
             <div class="tabContainer">
-                <div class="viewTitle">View 2</div>
+                <div class="viewTitle" id="view2_">View 2</div>
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer menuBarView' id='view2'>
                         <div>
@@ -53,7 +60,7 @@
             
             <!-- View 3 -->
             <div class="tabContainer">
-                <div class="viewTitle">View 3</div>
+                <div class="viewTitle" id="view3_">View 3</div>
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer menuBarView' id='view3'>
                         <div>
@@ -65,7 +72,7 @@
             
             <!-- View 4 -->
             <div class="tabContainer">
-                <div class="viewTitle">View 4</div>
+                <div class="viewTitle" id="view4_">View 4</div>
                 <div class='menuBarTabs notfilled'>
                     <div class='menuBarTabsContainer menuBarView' id='view4'>
                         <div>
@@ -125,13 +132,13 @@
             <!-- Filter controls -->
             <div id="filterControls">
                 <!--<h5>Filter Current View</h5>-->
-                <input id="filter_Name" type="text" placeholder="Name" />
-                <input id="filter_Weight" type="text" placeholder="Weight" />
-                <input id="filter_Walk" type="text" placeholder="Walk" />
-                <input id="filter_Run" type="text" placeholder="Run" />
-                <input id="Filter_Jump" type="text" placeholder="Jump" />
-                <input id="Filter_Weapons" type="text" placeholder="Weapons" />
-                <input id="Filter_Tags" type="text" placeholder="Tags" />
+                <input class="filterInput" id="filter_mechName" type="text" placeholder="Name" />
+                <input class="filterInput" id="filter_tonnage" type="text" placeholder="Weight" />
+                <input class="filterInput" id="filter_walk" type="text" placeholder="Walk" />
+                <input class="filterInput" id="filter_run" type="text" placeholder="Run" />
+                <input class="filterInput" id="filter_jump" type="text" placeholder="Jump" />
+                <input class="filterInput" id="filter_weapons" type="text" placeholder="Weapons" />
+                <input class="filterInput" id="filter_tags" type="text" placeholder="Tags" />
             </div>
             
             <!-- Vertical Divider -->
@@ -154,6 +161,42 @@
     
     <script>
         $(document).ready(function() {
+          
+            var keyupTimeoutID = 0;
+            
+            // Link Handlers
+            $('#index').click(function() {
+                location.replace('index.php');
+            });
+            $('.viewTitle').click(function() {
+                var linkID = this.id.split('_')[0];
+                location.replace(linkID + '.php');
+            });
+            
+            $.getJSON('./phpScripts/fetchViews.php', function(data) {
+               for(view in data) {
+                
+                    var viewID = view;
+                    var viewNum = viewID.substr(viewID.length - 1);
+                
+                    if (data[view] != "") {
+                        
+                        $('#' + viewID + ' div').empty();
+                        
+                        var mechArray = data[view].split(',');
+                        for(mech in mechArray) {
+                            var mechDetails = mechArray[mech].split('|');
+                            var mechName = mechDetails[1];
+                            var mechID = mechDetails[0].split('_')[0];
+                            
+                            var elemToAppend = '<p class="viewMech" id="viewMech_' + viewNum + '_' + mechID
+                            + '"><strong class="viewMechRemove" id="viewMechRemove_' + mechID + '">&nbsp;</strong>' + mechName + '</p>';
+                            
+                            $('#' + viewID + ' div').append(elemToAppend);
+                        }
+                    }
+               }
+            });
             
             // Link to Upload page
             $('#uploadImage').click(function() {
@@ -190,6 +233,24 @@
             
             function pillBoxHandlers() {
                 
+                $('.filterInput').on('input', function() {
+                    clearTimeout(keyupTimeoutID);
+                    keyupTimeoutID = setTimeout(function() {
+                      
+                        var filerObj = {};
+                      
+                        $('.filterInput').each(function() {
+                            var elemID = this.id;
+                            var filterID = elemID.split('filter_')[1];
+                            
+                            filerObj[filterID] = $(this).val().toLowerCase();
+                        })
+                        
+                        hideElements(filerObj);
+                        
+                    }, 1000);
+                });
+                
                 $('.menuBarView').click(function(e) {
                     var classArr = e.target.classList;
                     
@@ -204,6 +265,10 @@
                     if ($.inArray( 'viewMechRemove', classArr) >= 0) {
                         var removeTag = e.target.id;
                         removeTag = removeTag.replace('viewMechRemove_', '');
+                        
+                        var removeIndex = $('#viewMech_' + viewNum + '_' + removeTag).index();
+                        $.post('./phpScripts/reOrderMarkups.php?viewNum=' + viewNum + '&mechNum=' + (removeIndex + 1), function() {});
+                        
                         $('#viewMech_' + viewNum + '_' + removeTag).remove();
                         var elemCount = $('#' + viewID + ' div p').length;
                         if (elemCount == 0) {
@@ -246,6 +311,9 @@
                             }
                         });
                     }
+                    
+                    // Update views in database
+                    updateViews();
                 });
                 
                 $('#sortKey, #sortOrder').change(function() {
@@ -350,7 +418,7 @@
                         $('#previewImage').data('refID', lastMechID);
                     }
                 });
-            }
+            };
             
             
             function resizePreview(mechID) {
@@ -402,12 +470,84 @@
                 $('#mechListings').css('position', 'fixed');
                 $('#mechListings').css('display', 'fixed');
                 $('#mechListings').css('margin-left', '100%');
-            }
+            };
+            
+            
+            $("#preview").swipe({
+                swipe:function(event, direction, distance, duration, fingerCount) {
+                    if ((distance > ($(window).width() - 450)) && (fingerCount >= 1)) {
+                        switch(direction) {
+                            case "right":
+                                $('#prevMech').click();
+                                break;
+                            case "left":
+                                $('#nextMech').click();
+                                break;
+                        }
+                    }
+                }
+            });
             
             
             function getMechCheckValue(mechID) {
                 return $('#checkBox_' + mechID).prop('checked')
-            }
+            };
+            
+            
+            function hideElements(filerObj) {
+                
+                $('.mechBox').each(function() {
+                  var mechBoxData = $(this).find('.mechTitle input:checkbox').data();
+                  var hideElement = false;
+                  for (var field in mechBoxData) {
+                      var fieldValue = mechBoxData[field].toLowerCase();
+                      if ((fieldValue.indexOf(filerObj[field]) < 0) && (filerObj[field] != "") && (filerObj[field] != null)) {
+                          hideElement = true;
+                          break;
+                      }
+                  }
+                  
+                  if (hideElement) {
+                      $(this).css('display', 'none');
+                  }
+                  else {
+                      $(this).css('display', 'inline-block');
+                  }
+                  
+                });
+            };
+            
+            
+            function updateViews() {
+                // Update views in database
+                var viewsToUpdate = {};
+                $('.menuBarView').each(function() {
+                    var viewID = this.id;
+                    var viewNum = viewID.substr(viewID.length - 1);
+                    var viewMechStr = "";
+                    var viewMechCounter = 0;
+                    
+                    $(this).find('p').each(function() {
+                        var viewMechTagID = $(this).attr('id');
+                        var viewMechTagName = $(this).html().split('</strong>')[1];
+                        if (viewMechTagID != null) {
+                            viewMechCounter++;
+                            var viewMechID = viewMechTagID.split(viewNum + '_')[1];
+                            viewMechStr += viewMechID + "_" + viewMechCounter + "|" + viewMechTagName + ",";
+                        }
+                    })
+                    
+                    viewMechStr = viewMechStr.replace(/,\s*$/, "");
+                    viewsToUpdate[viewID] = viewMechStr;
+                });
+                
+                $.post("phpScripts/updateViews.php", JSON.stringify(viewsToUpdate))
+                .done(function( data ) {
+                  if (data != "updated views") {
+                    console.log('Error updating views');
+                  }
+                });
+            };
             
             
             window.addEventListener("resize", function() {

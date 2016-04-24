@@ -1,3 +1,9 @@
+<?php
+
+include('phpScripts/cookie.php');
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

@@ -7,6 +7,7 @@ class mongoOps {
     public $DB;
     public $MONGO_COLL_MECHS;
     public $MONGO_COLL_PDFS;
+    public $MONGO_COLL_MARKUPS;
     
     public function __construct()
     {
@@ -15,6 +16,7 @@ class mongoOps {
         $this->DB = $this->CONN->selectDB(MONGO_DB);
         $this->MONGO_COLL_MECHS = MONGO_COLL_MECHS;
         $this->MONGO_COLL_PDFS = MONGO_COLL_PDFS;
+        $this->MONGO_COLL_MARKUPS = MONGO_COLL_MARKUPS;
         
         $arguments = func_get_args();
 
@@ -36,10 +38,27 @@ class mongoOps {
         return $cursor;
     }
     
+    public function update($command, $newData, $COLL) {
+        
+        $collToPoll = $this->DB->selectCollection($this->$COLL);
+        
+        $cursor = $collToPoll->update($this->decodeCommand($command), $newData);
+        
+        return $cursor;
+    }
+    
     public function insert($command, $COLL) {
         
         $collToInsert = $this->DB->selectCollection($this->$COLL);
         $collToInsert->insert($command);
+        
+        return $command;
+    }
+    
+    public function remove($command, $COLL) {
+        
+        $collToRemove = $this->DB->selectCollection($this->$COLL);
+        $collToRemove->remove($command);
         
         return $command;
     }

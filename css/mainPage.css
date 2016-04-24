@@ -161,9 +161,11 @@ body * > {
     text-align: center;
     margin-left: 27px;
     margin-right: 20px;
-    margin-top: 5px;
+    margin-top: 0px;
+    margin-bottom: 5px;
     color: white;
-    font-size: 20px;
+    font-size: 25px;
+    cursor: pointer;
 }
 
 .uploadTitle {
@@ -361,7 +363,7 @@ body * > {
     background-color: red;
     height: 14px;
     width: 21px;
-    background: url(../images/deleteIcon.png);
+    background: url(../images/deleteIcon2.png);
     background-size: 80% 100%;
     background-repeat: no-repeat;
 }
