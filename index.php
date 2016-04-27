@@ -475,7 +475,7 @@ include('phpScripts/cookie.php');
             
             $("#preview").swipe({
                 swipe:function(event, direction, distance, duration, fingerCount) {
-                    if ((distance > ($(window).width() - 450)) && (fingerCount >= 1)) {
+                    if ((distance > ($(window).width() / 2)) && (fingerCount >= 1)) {
                         switch(direction) {
                             case "right":
                                 $('#prevMech').click();
