@@ -9,8 +9,6 @@ $(document).ready(function() {
     mechNumMod = 0;
     mechNumTotal = 0;
     
-    forcePortrait();
-    
     $.getJSON('./phpScripts/fetchViews.php', function(data) {
         var viewMechsAll = data[pageTitle];
         
@@ -34,7 +32,7 @@ $(document).ready(function() {
             }
         }
         
-        resizePreview();
+        forcePortrait();
     });
 
     
@@ -356,13 +354,16 @@ $(document).ready(function() {
         }
     });
     
-    window.addEventListener("orientationchange", function() {
-        forcePortrait();
-    });
     
     function forcePortrait() {
-        while ((window.orientation != null) && (window.orientation != 0) && (Math.abs(window.orientation) != 180)) {
+        if ((window.orientation != null) && (window.orientation != 0) && (Math.abs(window.orientation) != 180)) {
             alert("Portrait mode works best");
+            window.setTimeout(function() {
+                forcePortrait();
+            }, 200);
+        }
+        else {
+            resizePreview();
         }
     };
     
