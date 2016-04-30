@@ -69,10 +69,10 @@ include('phpScripts/cookie.php');
                     </select>
                     <select id="circle">
                         <option value="4">5</option>
-                        <option value="8">10</option>
-                        <option value="12">15</option>
-                        <option value="16">20</option>
-                        <option value="20">25</option>
+                        <option value="6">10</option>
+                        <option value="8">15</option>
+                        <option value="12">20</option>
+                        <option value="16">25</option>
                     </select>
                     <select id="drawColor">
                         <option value="#ff0000">Red</option>
@@ -91,10 +91,7 @@ include('phpScripts/cookie.php');
                     
                     <button id="clearCanvas"></button>
                     
-                    <div class="drawTriggers">
-                        <button id="disableDraw">Disable Draw</button>
-                        <button id="enableDraw">Enable Draw</button>
-                    </div>
+                    <button id="disableDraw">Disable/Enable Draw</button>
                 </div>
                 
                 <div id='controlRight'>

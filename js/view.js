@@ -8,6 +8,7 @@ $(document).ready(function() {
     viewMechs = {};
     mechNumMod = 0;
     mechNumTotal = 0;
+    disableDraw = false;
     
     $.getJSON('./phpScripts/fetchViews.php', function(data) {
         var viewMechsAll = data[pageTitle];
@@ -45,41 +46,44 @@ $(document).ready(function() {
         }
     };
     
+    
     $('#disableDraw').click(function() {
-        $('.overlay').remove();
-        $('#previewCanvas').append('<div class="overlay" style="top:81px; height:'
-            + $('#previewCanvas').height() + 'px; width: ' + $(window).width() + 'px;"></div>');
         
-        $('head').remove('#userZoom');
-        $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=1">');
+        disableDraw = ! disableDraw;
         
-        $(".overlay").swipe({
-            swipe:function(event, direction, distance, duration, fingerCount) {
-                if ((distance > ($(window).width() / 2)) && (fingerCount >= 1)) {
-                    switch(direction) {
-                        case "right":
-                            $('#prevMech').click();
-                            break;
-                        case "left":
-                            $('#nextMech').click();
-                            break;
+        if (disableDraw) {
+            $('.overlay').remove();
+            $('#previewCanvas').append('<div class="overlay" style="top:81px; height:'
+                + $('#previewCanvas').height() + 'px; width: ' + $(window).width() + 'px;"></div>');
+            
+            $('head').remove('#userZoom');
+            $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=1">');
+            
+            $(".overlay").swipe({
+                swipe:function(event, direction, distance, duration, fingerCount) {
+                    if ((distance > ($(window).width() / 2)) && (fingerCount >= 1)) {
+                        switch(direction) {
+                            case "right":
+                                $('#prevMech').click();
+                                break;
+                            case "left":
+                                $('#nextMech').click();
+                                break;
+                        }
                     }
                 }
-            }
-        });
-        
-        
-        $('#clearCanvas').prop('disabled', true);
-    });
-    
-    $('#enableDraw').click(function() {
-        $('.overlay').remove();
-        
-        $('head').remove('#userZoom');
-        $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=0">');
-        
-        
-        $('#clearCanvas').prop('disabled', false);
+            });
+            
+            $('#clearCanvas').prop('disabled', true);
+        }
+        else {
+            $('.overlay').remove();
+            
+            $('head').remove('#userZoom');
+            $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=0">');
+            
+            $('#clearCanvas').prop('disabled', false);
+        }
     });
     
     
@@ -106,8 +110,8 @@ $(document).ready(function() {
     /*   VARIABLES SET BY USERS */
     var drawColor = "#FF0000";
     var penWidth = 2;
-    var circleWidth = 5;
-    var eraserWidth = 5;
+    var circleWidth = 4;
+    var eraserWidth = 6;
     var mode="pen";
     
     
@@ -276,10 +280,10 @@ $(document).ready(function() {
         if (marginTop > 0) {
             marginTop = marginTop - 13;
             $('#previewCanvas').prepend('<div id="fillerDiv" style="float:top; min-height: ' + marginTop + 'px;"></div>');
-            marginTop = marginTop - 7;
+            marginTop = marginTop - 2;
         }
         else {
-            marginTop = -7;
+            marginTop = -2;
         }
         
         if (isMobile) {

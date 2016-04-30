@@ -111,21 +111,14 @@ body * {
     background-color: #b3b3b3;
 }
 
-.drawTriggers {
+#disableDraw {
+    font-family: zekton, sans-serif;
     display: inline-block;
-    vertical-align: top;
-    min-height: 92%;
-    height: 92%;
-    max-height: 92%;
-    min-width:45px;
-    max-width:150px;
-    margin: 0px 10px 0px 0px;
-}
-
-.drawTriggers button {
-    margin-top: 2%;
     min-width: 100px;
-    max-width: 100px;
+    max-width: 110px;
+    min-height: 36px;
+    height: 36px;
+    margin-top: 7px;
 }
 
 #floatBar {
