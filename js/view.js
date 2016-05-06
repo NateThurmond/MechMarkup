@@ -84,6 +84,8 @@ $(document).ready(function() {
             
             $('#clearCanvas').prop('disabled', false);
         }
+        
+        saveMarkup();
     });
     
     
@@ -119,18 +121,26 @@ $(document).ready(function() {
     $('#pen').bind('click change', function() {
         mode="pen";
         penWidth = $("#pen option:selected").val();
+        
+        saveMarkup();
     });
     $('#circle').bind('click change', function() {
         mode="circle";
         circleWidth = $("#circle option:selected").val();
+        
+        saveMarkup();
     });
     $('#drawColor').bind('click change', function() {
         mode="pen";
         drawColor = $("#drawColor option:selected").val();
+        
+        saveMarkup();
     });
     $('#eraser').bind('click change', function() {
         mode="eraser";
         eraserWidth = $("#eraser option:selected").val();
+        
+        saveMarkup();
     });
 
 
@@ -360,7 +370,7 @@ $(document).ready(function() {
     
     
     function forcePortrait() {
-        if ((window.orientation != null) && (window.orientation != 0) && (Math.abs(window.orientation) != 180)) {
+        if (window.innerHeight < window.innerWidth) {
             alert("Portrait mode works best");
             window.setTimeout(function() {
                 forcePortrait();
@@ -370,6 +380,17 @@ $(document).ready(function() {
             resizePreview();
         }
     };
+    
+    function saveMarkup() {
+        if (viewMechs != "") {
+            // Update the current markup for the view
+            var mycanvas = document.getElementById("canvas");
+            var image    = mycanvas.toDataURL("image/jpg");
+            var currentMech = (mechNumMod.mod(mechNumTotal)) + 1;
+            
+            updateMarkup(currentMech, image, function() {});
+        }
+    }
     
     function updateMarkup(currentMech, image, callback) {
         
