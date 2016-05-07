@@ -19,6 +19,7 @@ include('phpScripts/cookie.php');
         <script src="js/jquery-1.12.2.min.js"></script>
         <script src="js/jquery.touchSwipe.js"></script>
         <script src='js/jquery.customSelect.min.js'></script>
+        <script src="js/panzoom.js"></script>
     </head>
     <body>
         
@@ -92,6 +93,9 @@ include('phpScripts/cookie.php');
                     <button id="clearCanvas"></button>
                     
                     <button id="disableDraw">Disable/Enable Draw</button>
+                    
+                    <button id="zoomIn">Zoom in</button>
+                    <button id="zoomOut">Zoom Out</button>
                 </div>
                 
                 <div id='controlRight'>

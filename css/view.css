@@ -111,23 +111,12 @@ body * {
     background-color: #b3b3b3;
 }
 
-#disableDraw {
+#disableDraw, #zoomIn, #zoomOut {
     vertical-align: top;
     font-family: zekton, sans-serif;
     display: inline-block;
     min-width: 100px;
     max-width: 110px;
-    min-height: 36px;
-    height: 36px;
-    margin-top: 7px;
-}
-
-#zoomIn, #zoomOut {
-    vertical-align: top;
-    min-width: 100px;
-    max-width: 110px;
-    font-family: zekton, sans-serif;
-    display: inline-block;
     min-height: 36px;
     height: 36px;
     margin-top: 7px;

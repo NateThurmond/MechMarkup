@@ -1,4 +1,39 @@
+var critZoom = {zoomLevel: 1.65, xOff: .32, yOff: 0.2545};
+var critArmor = {zoomLevel: 2.1, xOff: .47, yOff: -0.5045};
+var weaponArea = {zoomLevel: 2.6, xOff: -0.54, yOff: 0.7245};
+var mechArmor = {zoomLevel: 2.4, xOff: -0.575, yOff: -0.6995};
+var pilotSection = {zoomLevel: 3, xOff: -0.675, yOff: -0.06};
+
+
 $(document).ready(function() {
+    
+    var isMobile = detectMobile();
+    var halfPageWidth = 0;
+    var halfPageHeight = 0;
+    var pdfHeight = 0;
+    var pdfWidth = 0;
+    var zoomModeActive = false;
+    var zoomModeSet = false;
+    var zoomArea = "critZoom";
+
+    $("#canvas").panzoom({
+        disablePan: true
+    });            
+    
+    $('#zoomIn').click(function() {
+        zoomModeSet = true;
+        $('#zoomIn').attr('disabled', true);
+    });
+    
+    $('#zoomOut').click(function() {
+        zoomModeSet = false;
+        zoomModeActive = false;
+        
+        $('#zoomIn').attr('disabled', false);
+        $("#canvas").panzoom("zoom", 1, { silent: true });
+        $("#canvas").css('position', 'static');
+        $("#canvas").css('top', '0px');
+    });
     
     $('#pen').customSelect({customClass:'penSelect'});
     $('#circle').customSelect({customClass:'circleSelect'});
@@ -35,16 +70,6 @@ $(document).ready(function() {
         
         forcePortrait();
     });
-
-    
-    function detectMobile() {
-        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
     
     
     $('#disableDraw').click(function() {
@@ -90,14 +115,15 @@ $(document).ready(function() {
     
     
     $('#clearCanvas').click(function() {
-        var mycanvas = document.getElementById("canvas");
-        var ctx = mycanvas.getContext("2d");
-        ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+        if (confirm('Clear Image?')) {
+            var mycanvas = document.getElementById("canvas");
+            var ctx = mycanvas.getContext("2d");
+            ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+        }
     });
 
 
     /*   VARIABLES USED FOR BOTH MOBILE AND BROWSER BASED DRAWING  */
-    var isMobile = detectMobile();
     var canvas=document.getElementById("canvas");
     var ctx=canvas.getContext("2d");
     var lastX;
@@ -208,6 +234,7 @@ $(document).ready(function() {
     
 
     $('#nextMech').click(function() {
+        $('#zoomOut').click();
         if (viewMechs != "") {
             // Update the current markup for the view
             var mycanvas = document.getElementById("canvas");
@@ -229,6 +256,7 @@ $(document).ready(function() {
     });
     
     $('#prevMech').click(function() {
+        $('#zoomOut').click();
         if (viewMechs != "") {
             // Update the current markup for the view
             var mycanvas = document.getElementById("canvas");
@@ -266,6 +294,9 @@ $(document).ready(function() {
             heightToStretch = heightToStretchNew;
         }
         
+        pdfHeight = heightToStretch;
+        pdfWidth = pdfHeight * 0.7727;
+        
         $('#canvas').attr('height', heightToStretch);
         $('#canvas').attr('width', widthToStretch);
         $('#canvas').css('min-height', heightToStretch + 'px');
@@ -287,6 +318,9 @@ $(document).ready(function() {
         
         var marginTop = ($(window).height() - $('#floatBar').height() - $('#canvas').height()) / 2;
         
+        halfPageWidth = widthToStretch / 2;
+        halfPageHeight = ($('#canvas').height() / 2) + $('#floatBar').height();
+        
         if (marginTop > 0) {
             marginTop = marginTop - 13;
             $('#previewCanvas').prepend('<div id="fillerDiv" style="float:top; min-height: ' + marginTop + 'px;"></div>');
@@ -298,27 +332,56 @@ $(document).ready(function() {
         
         if (isMobile) {
             $('#canvas').bind('touchstart', function(e) {
-                handleMouseDown(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY - marginTop);
+                if (zoomModeSet) {
+                    calcZoomScope(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY);
+                }
+                else {
+                    var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
+                        halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseDown(offsets[0], offsets[1]);
+                }
             })
             $('#canvas').bind('touchmove', function(e) {
-                handleMouseMove(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY - marginTop);
+                if (! zoomModeSet) {
+                    var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
+                        halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
+                }
             })
             $('#canvas').bind('click', function(e) {
-                handleMouseMove(e.clientX, e.clientY - marginTop);
+                if (! zoomModeSet) {
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
+                }
             })
         }
         else {
             $('#canvas').bind('mousedown', function(e) {
-                handleMouseDown(e.clientX, e.clientY - marginTop);
+                if (zoomModeSet) {
+                    calcZoomScope(e.clientX, e.clientY);
+                }
+                else {
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseDown(offsets[0], offsets[1]);
+                }
             })
             $('#canvas').bind('mousemove', function(e) {
-                handleMouseMove(e.clientX, e.clientY - marginTop);
+                if (! zoomModeSet) {
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
+                }
             })
             $('#canvas').bind('mouseup', function(e) {
-                handleMouseUp(e.clientX, e.clientY - marginTop);
+                if (! zoomModeSet) {
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseUp(offsets[0], offsets[1]);
+                }
             })
             $('#canvas').bind('mouseout', function(e) {
-                handleMouseOut(e.clientX, e.clientY - marginTop);
+                if (! zoomModeSet) {
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseOut(offsets[0], offsets[1]);
+                }
             })
         }
     };
@@ -345,8 +408,7 @@ $(document).ready(function() {
         if (viewMechs == "") {
             location.replace(linkID + '.php');
         }
-        else {
-            
+        else {       
             // Update the current markup for the view
             var mycanvas = document.getElementById("canvas");
             var image    = mycanvas.toDataURL("image/jpg");
@@ -370,7 +432,7 @@ $(document).ready(function() {
     
     
     function forcePortrait() {
-        if (window.innerHeight < window.innerWidth) {
+        if ((window.innerHeight < window.innerWidth) && isMobile) {
             alert("Portrait mode works best");
             window.setTimeout(function() {
                 forcePortrait();
@@ -390,17 +452,80 @@ $(document).ready(function() {
             
             updateMarkup(currentMech, image, function() {});
         }
-    }
+    };
     
-    function updateMarkup(currentMech, image, callback) {
-        
+    function updateMarkup(currentMech, image, callback) {    
         var markupToUpdate = {markup:image};
         
         $.post("phpScripts/updateMarkups.php?viewNum=" + pageNum +
            "&mechNum=" + currentMech, JSON.stringify(markupToUpdate))
-        .done(function( data ) {
+        .done(function(data) {
             callback();
         });
+    };
+    
+    function calcZoomScope(passedX, passedY) {
+        var calcX = passedX - (($(window).width() - pdfWidth) / 2);
+        var calcY = passedY - $('#floatBar').height();
+        if ($('#fillerDiv').height() != null) {
+            calcY -= $('#fillerDiv').height();
+        }
+        
+        if ((calcX < (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
+            zoomArea = "critZoom";
+        }
+        else if ((calcX > (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
+            zoomArea = "critArmor";
+        }
+        else if ((calcX < (pdfWidth * 0.41)) && (calcY < (pdfHeight * 0.47))) {
+            zoomArea = "weaponArea";
+        }
+        else if ((calcX > (pdfWidth * 0.65)) && (calcY < (pdfHeight * 0.47))) {
+            zoomArea = "mechArmor";
+        }
+        else if ((calcX < (pdfWidth * 0.65)) && (calcX > (pdfWidth * 0.41)) &&
+                 (calcY < (pdfHeight * 0.47))) {
+            zoomArea = "pilotSection";
+        }
+        
+        if (zoomArea != "") {
+            $("#canvas").panzoom("zoom", window[zoomArea]['zoomLevel'], {});
+            $("#canvas").css('position', 'relative');
+            $("#canvas").css('top', - (pdfHeight * window[zoomArea]['xOff']) + 'px');
+            $("#canvas").css('left', (pdfWidth * window[zoomArea]['yOff']) + 'px');
+            
+            setTimeout(function(){
+                zoomModeActive = true;
+                zoomModeSet = false;
+            }, 500);
+        }
+    };
+    
+    function calcXY(clientX, clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive) {
+        var offsetX = clientX;
+        var offsetY = clientY - marginTop;
+        
+        if (zoomModeActive) {
+            if (clientX > halfPageWidth) {
+                offsetX = halfPageWidth + ((clientX - halfPageWidth) / window[zoomArea]['zoomLevel']) - ((pdfWidth * window[zoomArea]['yOff']) / window[zoomArea]['zoomLevel']);
+            }
+            else {
+                offsetX = halfPageWidth - ((halfPageWidth - clientX) / window[zoomArea]['zoomLevel']) - ((pdfWidth * window[zoomArea]['yOff']) / window[zoomArea]['zoomLevel']);
+            }
+            
+            if (marginTop > 0) {
+                marginTop = marginTop / window[zoomArea]['zoomLevel'];
+            }
+            
+            if (clientY > halfPageHeight) {
+                offsetY = halfPageHeight + ((clientY - halfPageHeight) / window[zoomArea]['zoomLevel']) - (marginTop) + ((pdfHeight * window[zoomArea]['xOff']) / window[zoomArea]['zoomLevel']);
+            }
+            else {
+                offsetY = halfPageHeight - ((halfPageHeight - clientY) / window[zoomArea]['zoomLevel']) - (marginTop) + ((pdfHeight * window[zoomArea]['xOff']) / window[zoomArea]['zoomLevel']);
+            }
+        }
+        
+        return [offsetX, offsetY];
     };
     
     function fetchMarkup(pageNum, mechNum, ctx, mycanvas) {
@@ -418,6 +543,15 @@ $(document).ready(function() {
                     photo.src = imageSrc;
                 }
         });
+    };
+    
+    function detectMobile() {
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     };
     
     Number.prototype.mod = function(n) {
