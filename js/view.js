@@ -62,7 +62,6 @@ $(document).ready(function() {
                 var mechID = mechParts[0].split('_')[0];
                 var mechNum = mechParts[0].split('_')[1];
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
-                (new Image()).src = imageRef;
                 
                 var indMech = {mechName:mechName, refID: mechID, imageRef:imageRef, mechNum:mechNum, numRefID: mechIDref};
                 viewMechs[mechNum] = indMech;
