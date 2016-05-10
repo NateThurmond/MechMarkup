@@ -62,6 +62,7 @@ $(document).ready(function() {
                 var mechID = mechParts[0].split('_')[0];
                 var mechNum = mechParts[0].split('_')[1];
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
+                (new Image()).src = imageRef;
                 
                 var indMech = {mechName:mechName, refID: mechID, imageRef:imageRef, mechNum:mechNum, numRefID: mechIDref};
                 viewMechs[mechNum] = indMech;
@@ -235,7 +236,16 @@ $(document).ready(function() {
 
     $('#nextMech').click(function() {
         $('#zoomOut').click();
+        
         if (viewMechs != "") {
+            $('#canvas').animate({
+                opacity: 0, // animate slideUp
+                marginLeft: '-1000px'
+                }, 400, 'linear', function() {
+            
+                $('#canvas').css('opacity', '100');
+                $('#canvas').css('marginLeft', '0px');
+            });
             // Update the current markup for the view
             var mycanvas = document.getElementById("canvas");
             var image    = mycanvas.toDataURL("image/jpg");
@@ -257,7 +267,16 @@ $(document).ready(function() {
     
     $('#prevMech').click(function() {
         $('#zoomOut').click();
+        
         if (viewMechs != "") {
+            $('#canvas').animate({
+                opacity: 0, // animate slideUp
+                marginLeft: '1000px'
+                }, 400, 'linear', function() {
+            
+                $('#canvas').css('opacity', '100');
+                $('#canvas').css('marginLeft', '0px');
+            });
             // Update the current markup for the view
             var mycanvas = document.getElementById("canvas");
             var image    = mycanvas.toDataURL("image/jpg");
