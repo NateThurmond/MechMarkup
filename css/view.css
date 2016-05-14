@@ -18,6 +18,7 @@ body * {
     position:fixed;
     left:0px;
     z-index:1000;
+    display: none;
 }
 
 #menuBar {
@@ -68,7 +69,7 @@ body * {
     background-position: center;
     background-size: 95% 95%;
     background-repeat: no-repeat;
-    background-color: #b3b3b3;
+    background-color: #99ccff;
 }
 
 .circleSelect {
@@ -135,7 +136,7 @@ body * {
     height: 100%;
 }
 
-#canvas {
+.canvas {
     margin: 0px 0px 0px 0px;
     min-width: 100%;
     background-position: center;
@@ -144,4 +145,12 @@ body * {
     min-height: 500px;
     width: 100%;
     height: 100%;
+}
+
+.canvas {
+    display: none;
+}
+
+.canvasSelected {
+    display: block;
 }

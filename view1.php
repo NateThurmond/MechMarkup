@@ -61,28 +61,28 @@ include('phpScripts/cookie.php');
                 </div>
                 
                 <div id='controlCenter'>
-                    <select id="pen">
+                    <select id="pen" class="drawOption">
                         <option value="2">2</option>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
                     </select>
-                    <select id="circle">
+                    <select id="circle" class="drawOption">
                         <option value="4">5</option>
                         <option value="6">10</option>
                         <option value="8">15</option>
                         <option value="12">20</option>
                         <option value="16">25</option>
                     </select>
-                    <select id="drawColor">
+                    <select id="drawColor" class="drawOption">
                         <option value="#ff0000">Red</option>
                         <option value="#000000">Black</option>
                         <option value="#0000ff">Blue</option>
                         <option value="#008000">Green</option>
                         <option value="#ffff00">Yellow</option>
                     </select>
-                    <select id="eraser">
+                    <select id="eraser" class="drawOption">
                         <option value="6">5</option>
                         <option value="12">10</option>
                         <option value="18">15</option>
@@ -107,7 +107,7 @@ include('phpScripts/cookie.php');
         
         <!-- PDF view -->
         <div id='previewCanvas'>
-            <canvas id="canvas"></canvas>
+            <div class="overlay"></div>
         </div>
         
     </body>
