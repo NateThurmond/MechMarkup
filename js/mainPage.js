@@ -228,15 +228,21 @@ $(document).ready(function() {
             
             if ((nextMechID != "undefined") && (nextMechID != null)) {
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + nextMechID;
-                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                 $('#previewImage').data('refID', nextMechID);
             }
             else {
                 var firstMechID = $('.mechBox:visible:first').children('.mechTitle').find(':checkbox').data('_id');
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + firstMechID;
-                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                 $('#previewImage').data('refID', firstMechID);
             }
+            
+            $('#previewImage').animate({
+                opacity: 0, // animate slideUp
+                }, 150, function() {
+            
+                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
+                $('#previewImage').animate({opacity: 1}, 550);
+            });
         });
         
         $('#prevMech').click(function() {
@@ -246,15 +252,21 @@ $(document).ready(function() {
             
             if ((prevMechID != "undefined") && (prevMechID != null)) {
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + prevMechID;
-                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                 $('#previewImage').data('refID', prevMechID);
             }
             else {
                 var lastMechID = $('.mechBox:visible:last').children('.mechTitle').find(':checkbox').data('_id');
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + lastMechID;
-                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
                 $('#previewImage').data('refID', lastMechID);
             }
+            
+            $('#previewImage').animate({
+                opacity: 0, // animate slideUp
+                }, 150, function() {
+            
+                $('#previewImage').css('background-image', 'url(' + imageRef + ')');
+                $('#previewImage').animate({opacity: 1}, 550);
+            });
         });
     };
     
@@ -272,6 +284,7 @@ $(document).ready(function() {
         $('#preview').css('height', '100px');
         $('#preview').css('width', '100px');
         $('#previewImage').css('margin-top', '0px');
+        $('#previewImage').css('opacity', 0);
         
         var heightToStretch = $(window).height() - $('#menuBar').height() - 0;
         var widthToStretch = $('body').width();
@@ -303,6 +316,7 @@ $(document).ready(function() {
         var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
         $('#previewImage').css('background-image', 'url(' + imageRef + ')');
         $('#previewImage').data(previewData);
+        $('#previewImage').animate({opacity: 1}, 600);
         
         // Needed to prevent scrolling through listings on preview screen
         $('#mechListings').css('position', 'fixed');
