@@ -51,7 +51,7 @@ body * {
     width: 74%;
 }
 
-.penSelect, .circleSelect, .eraserSelect, .drawColorSelect {
+.penSelect, .circleSelect, .eraserSelect, .drawColorSelect, .textSelect {
     color: white;
     text-shadow: 2px 2px black;
     vertical-align: top;
@@ -76,6 +76,14 @@ body * {
     background: url(../images/circle.png);
     background-position: center;
     background-size: 95% 95%;
+    background-repeat: no-repeat;
+    background-color: #b3b3b3;
+}
+
+.textSelect {
+    background: url(../images/textIcon.png);
+    background-position: center;
+    background-size: 125% 95%;
     background-repeat: no-repeat;
     background-color: #b3b3b3;
 }

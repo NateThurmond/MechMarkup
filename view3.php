@@ -75,6 +75,13 @@ include('phpScripts/cookie.php');
                         <option value="12">20</option>
                         <option value="16">25</option>
                     </select>
+                    <select id="text" class="drawOption">
+                        <option value="6">5</option>
+                        <option value="12">10</option>
+                        <option value="18">15</option>
+                        <option value="24">20</option>
+                        <option value="30">25</option>
+                    </select>
                     <select id="drawColor" class="drawOption">
                         <option value="#ff0000">Red</option>
                         <option value="#000000">Black</option>

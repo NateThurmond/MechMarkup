@@ -1,4 +1,4 @@
-
+        
 var critZoom = {zoomLevel: 1.65, xOff: .32, yOff: 0.2545};
 var critArmor = {zoomLevel: 2.1, xOff: .47, yOff: -0.5045};
 var weaponArea = {zoomLevel: 2.6, xOff: -0.54, yOff: 0.7245};
@@ -22,6 +22,8 @@ $(document).ready(function() {
     var penWidth = 2;
     var circleWidth = 4;
     var eraserWidth = 6;
+    var textWidth = 6;
+    var textToFill = "";
     var mode="pen";
     
     viewMechs = true;
@@ -43,61 +45,9 @@ $(document).ready(function() {
     
     $('#pen').customSelect({customClass:'penSelect'});
     $('#circle').customSelect({customClass:'circleSelect'});
+    $('#text').customSelect({customClass:'textSelect'});
     $('#drawColor').customSelect({customClass:'drawColorSelect'});
     $('#eraser').customSelect({customClass:'eraserSelect'});
-    
-    /* Handlers for draw control buttons/selects */
-    $('#pen').bind('click', function() {
-        mode="pen";
-        penWidth = $("#pen option:selected").val();
-        
-        $('.drawOption').css('background-color', '#b3b3b3');
-        $('.penSelect').css('background-color', '#99ccff');
-        $('.drawOption option').css('background-color', 'white');
-    });
-    $('#pen').bind('change', function() {
-        mode="pen";
-        penWidth = $("#pen option:selected").val();
-        saveMarkup();
-    });
-    $('#circle').bind('click', function() {
-        mode="circle";
-        circleWidth = $("#circle option:selected").val();
-        
-        $('.drawOption').css('background-color', '#b3b3b3');
-        $('.circleSelect').css('background-color', '#99ccff');
-        $('.drawOption option').css('background-color', 'white');
-    });
-    $('#circle').bind('change', function() {
-        mode="circle";
-        circleWidth = $("#circle option:selected").val();
-        saveMarkup();
-    });
-    $('#drawColor').bind('click', function() {
-        drawColor = $("#drawColor option:selected").val();
-        
-        $('.drawOption').css('background-color', '#b3b3b3');
-        $('.' + mode + 'Select').css('background-color', '#99ccff');
-        $('.drawOption option').css('background-color', 'white');
-    });
-    $('#drawColor').bind('change', function() {
-        drawColor = $("#drawColor option:selected").val();
-        saveMarkup();
-    });
-    $('#eraser').bind('click', function() {
-        mode="eraser";
-        eraserWidth = $("#eraser option:selected").val();
-        
-        $('.drawOption').css('background-color', '#b3b3b3');
-        $('.eraserSelect').css('background-color', '#99ccff');
-        $('.drawOption option').css('background-color', 'white');
-    });
-    $('#eraser').bind('change', function() {
-        mode="eraser";
-        eraserWidth = $("#eraser option:selected").val();
-        saveMarkup();
-    });
-    
     
     $.getJSON('./phpScripts/fetchViews.php', function(data) {
         var viewMechsAll = data[pageTitle];
@@ -345,30 +295,91 @@ $(document).ready(function() {
             ctx=canvas.getContext("2d");
         });
         
-        $('#disableDraw').click(function() {
-            
+        $('#disableDraw').click(function() {  
             disableDraw = ! disableDraw;
             
             if (disableDraw) {
                 $('.overlay').css('display', 'block');
-                
                 $('head').remove('#userZoom');
                 $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=1">');
                 $('#clearCanvas').prop('disabled', true);
             }
             else {
                 $('.overlay').css('display', 'none');
-                
                 $('head').remove('#userZoom');
                 $('head').append('<meta id="userZoom" name="viewport" content="user-scalable=0">');
                 $('#clearCanvas').prop('disabled', false);
             }
         });
+        
+        /* Handlers for draw control buttons/selects */
+        $('#pen').bind('click', function() {
+            mode="pen";
+            penWidth = $("#pen option:selected").val();
+            
+            $('.drawOption').css('background-color', '#b3b3b3');
+            $('.penSelect').css('background-color', '#99ccff');
+            $('.drawOption option').css('background-color', 'white');
+        });
+        $('#pen').bind('change', function() {
+            mode="pen";
+            penWidth = $("#pen option:selected").val();
+            saveMarkup();
+        });
+        $('#circle').bind('click', function() {
+            mode="circle";
+            circleWidth = $("#circle option:selected").val();
+            
+            $('.drawOption').css('background-color', '#b3b3b3');
+            $('.circleSelect').css('background-color', '#99ccff');
+            $('.drawOption option').css('background-color', 'white');
+        });
+        $('#circle').bind('change', function() {
+            mode="circle";
+            circleWidth = $("#circle option:selected").val();
+            saveMarkup();
+        });
+        $('#text').bind('click', function() {
+            mode="text";
+            textWidth = $("#text option:selected").val();
+            
+            $('.drawOption').css('background-color', '#b3b3b3');
+            $('.textSelect').css('background-color', '#99ccff');
+            $('.drawOption option').css('background-color', 'white');
+        });
+        $('#text').bind('change', function() {
+            mode="text";
+            textWidth = $("#text option:selected").val();
+            saveMarkup();
+        });
+        $('#drawColor').bind('click', function() {
+            drawColor = $("#drawColor option:selected").val();
+            
+            $('.drawOption').css('background-color', '#b3b3b3');
+            $('.' + mode + 'Select').css('background-color', '#99ccff');
+            $('.drawOption option').css('background-color', 'white');
+        });
+        $('#drawColor').bind('change', function() {
+            drawColor = $("#drawColor option:selected").val();
+            saveMarkup();
+        });
+        $('#eraser').bind('click', function() {
+            mode="eraser";
+            eraserWidth = $("#eraser option:selected").val();
+            
+            $('.drawOption').css('background-color', '#b3b3b3');
+            $('.eraserSelect').css('background-color', '#99ccff');
+            $('.drawOption option').css('background-color', 'white');
+        });
+        $('#eraser').bind('change', function() {
+            mode="eraser";
+            eraserWidth = $("#eraser option:selected").val();
+            saveMarkup();
+        });
     }
     
     
     $('.viewTitle').click(function() {
-        
         var linkID = this.id.split('_')[0];
         
         if (viewMechs == false) {
@@ -489,7 +500,7 @@ $(document).ready(function() {
         if(mode=="pen") {
             
           ctx.lineWidth = penWidth;
-          ctx.strokeStyle = drawColor;	
+          ctx.strokeStyle = drawColor;
             
           ctx.globalCompositeOperation="source-over";
           ctx.moveTo(lastX,lastY);
@@ -501,6 +512,17 @@ $(document).ready(function() {
             ctx.fillStyle = drawColor;
             ctx.arc(lastX,lastY,circleWidth,0,Math.PI*2,false);
             ctx.fill(); 
+        }
+        else if (mode=="text") {
+            isMouseDown = false;
+            
+            textToFill = prompt("Please enter your text");
+            if (textToFill != null) {
+                ctx.font = textWidth + "px Verdana";
+                ctx.fillStyle = drawColor;
+                ctx.fillText(textToFill, lastX,lastY);
+            }
+            textToFill = "";
         }
         else if(mode=="eraser") {
           ctx.globalCompositeOperation="destination-out";
