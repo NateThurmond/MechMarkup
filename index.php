@@ -16,6 +16,7 @@ include('phpScripts/cookie.php');
         
         <script src="js/jquery-1.12.2.min.js"></script>
         <script src="js/jquery.touchSwipe.js"></script>
+        <!--<script src="js/googleAnalytics.js"></script>-->
     </head>
     <body>
         
