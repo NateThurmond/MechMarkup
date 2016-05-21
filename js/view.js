@@ -5,6 +5,11 @@ var weaponArea = {zoomLevel: 2.6, xOff: -0.54, yOff: 0.7245};
 var mechArmor = {zoomLevel: 2.4, xOff: -0.575, yOff: -0.6995};
 var pilotSection = {zoomLevel: 3, xOff: -0.675, yOff: -0.06};
 
+var elemental_group1 = {zoomLevel: 1.6, xOff: -0.14, yOff: 0.2745};
+var elemental_group2 = {zoomLevel: 1.6, xOff: .22, yOff: 0.2745};
+var elemental_attacks = {zoomLevel: 2.1, xOff: -0.375, yOff: -0.5595};
+var elemental_swarm = {zoomLevel: 2.4, xOff: .57, yOff: -0.6195};
+
 
 $(document).ready(function() {
     
@@ -27,6 +32,7 @@ $(document).ready(function() {
     var mode="pen";
     
     viewMechs = true;
+    mechTypes = {};
     mechNumMod = 0;
     mechNumTotal = 0;
     disableDraw = false;
@@ -61,9 +67,17 @@ $(document).ready(function() {
             
             for (mechs in viewMechsSplit) {
                 var mechParts = viewMechsSplit[mechs].split('|');
+                var mechName = mechParts[1].toLowerCase();
                 var mechID = mechParts[0].split('_')[0];
                 var mechNum = mechParts[0].split('_')[1];
                 var imageRef = 'phpScripts/getPDF.php?mechID=' + mechID;
+                
+                if (mechName.indexOf('elemental') >= 0) {
+                    mechTypes[mechID] = "elemental";
+                }
+                else {
+                    mechTypes[mechID] = "mech";
+                }
                 
                 var canvasElem = document.createElement('canvas');
                 canvasElem.id = "canvas_" + mechNum;
@@ -399,27 +413,47 @@ $(document).ready(function() {
     });
     
     function calcZoomScope(passedX, passedY) {
+        
+        var mechID = $('.canvasSelected').css('background-image').split('?mechID=')[1].replace('")', '').replace(')', '');
+        var mechType = mechTypes[mechID];
+        
         var calcX = passedX - (($(window).width() - pdfWidth) / 2);
         var calcY = passedY - $('#floatBar').height();
         if ($('#fillerDiv').height() != null) {
             calcY -= $('#fillerDiv').height();
         }
-        
-        if ((calcX < (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
-            zoomArea = "critZoom";
+
+        if (mechType == 'elemental') {
+            if ((calcX < (pdfWidth * 0.62)) && (calcY < (pdfHeight * 0.51))) {
+                zoomArea = "elemental_group1";
+            }
+            else if ((calcX < (pdfWidth * 0.62)) && (calcY > (pdfHeight * 0.51))) {
+                zoomArea = "elemental_group2";
+            }
+            else if ((calcX > (pdfWidth * 0.62)) && (calcY < (pdfHeight * 0.54))) {
+                zoomArea = "elemental_attacks";
+            }
+            else if ((calcX > (pdfWidth * 0.62)) && (calcY > (pdfHeight * 0.54))) {
+                zoomArea = "elemental_swarm";
+            }
         }
-        else if ((calcX > (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
-            zoomArea = "critArmor";
-        }
-        else if ((calcX < (pdfWidth * 0.41)) && (calcY < (pdfHeight * 0.47))) {
-            zoomArea = "weaponArea";
-        }
-        else if ((calcX > (pdfWidth * 0.65)) && (calcY < (pdfHeight * 0.47))) {
-            zoomArea = "mechArmor";
-        }
-        else if ((calcX < (pdfWidth * 0.65)) && (calcX > (pdfWidth * 0.41)) &&
-                 (calcY < (pdfHeight * 0.47))) {
-            zoomArea = "pilotSection";
+        else {
+            if ((calcX < (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
+                zoomArea = "critZoom";
+            }
+            else if ((calcX > (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
+                zoomArea = "critArmor";
+            }
+            else if ((calcX < (pdfWidth * 0.41)) && (calcY < (pdfHeight * 0.47))) {
+                zoomArea = "weaponArea";
+            }
+            else if ((calcX > (pdfWidth * 0.65)) && (calcY < (pdfHeight * 0.47))) {
+                zoomArea = "mechArmor";
+            }
+            else if ((calcX < (pdfWidth * 0.65)) && (calcX > (pdfWidth * 0.41)) &&
+                     (calcY < (pdfHeight * 0.47))) {
+                zoomArea = "pilotSection";
+            }
         }
         
         if (zoomArea != "") {

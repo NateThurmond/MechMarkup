@@ -329,6 +329,10 @@ body * > {
 
 .viewMech {
     font-size: 12px !important;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #preview {
@@ -366,10 +370,6 @@ body * > {
     background: url(../images/deleteIcon2.png);
     background-size: 80% 100%;
     background-repeat: no-repeat;
-}
-
-.viewMech {
-    text-align: left;
 }
 
 #controlCenter, #controlLeft, #controlRight {
