@@ -44,11 +44,11 @@ body * {
 }
 
 #controlLeft, #controlRight {
-    width: 12%;
+    width: 10%;
 }
 
 #controlCenter {
-    width: 74%;
+    width: 78%;
 }
 
 .penSelect, .circleSelect, .eraserSelect, .drawColorSelect, .textSelect {
@@ -120,15 +120,36 @@ body * {
     background-color: #b3b3b3;
 }
 
-#disableDraw, #zoomIn, #zoomOut {
+#disableDraw {
+    padding-left: 2px;
+    padding-right: 2px;
     vertical-align: top;
     font-family: zekton, sans-serif;
     display: inline-block;
-    min-width: 100px;
-    max-width: 110px;
+    min-width: 65px;
+    max-width: 65px;
     min-height: 36px;
     height: 36px;
     margin-top: 7px;
+}
+
+.zoomButton {
+    margin-left: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    font-size: 12px !important;
+    vertical-align: top;
+    font-family: zekton, sans-serif;
+    display: inline-block;
+    min-height: 36px;
+    height: 36px;
+    margin-top: 7px;
+    min-width: 55px;
+    max-width: 55px;
+}
+
+.zoomHighlight {
+    color: blue !important;
 }
 
 #floatBar {

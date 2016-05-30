@@ -1,4 +1,4 @@
-        
+
 var critZoom = {zoomLevel: 1.65, xOff: .32, yOff: 0.2545};
 var critArmor = {zoomLevel: 2.1, xOff: .47, yOff: -0.5045};
 var weaponArea = {zoomLevel: 2.6, xOff: -0.54, yOff: 0.7245};
@@ -19,7 +19,6 @@ $(document).ready(function() {
     var pdfHeight = 0;
     var pdfWidth = 0;
     var zoomModeActive = false;
-    var zoomModeSet = false;
     var zoomArea = "critZoom";
     
     /*   VARIABLES SET BY USERS */
@@ -158,56 +157,36 @@ $(document).ready(function() {
             
             if (isMobile) {
                 $('.canvas').bind('touchstart', function(e) {
-                    if (zoomModeSet) {
-                        calcZoomScope(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY);
-                    }
-                    else {
-                        var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
-                            halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseDown(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
+                        halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseDown(offsets[0], offsets[1]);
                 })
                 $('.canvas').bind('touchmove', function(e) {
-                    if (! zoomModeSet) {
-                        var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
-                            halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseMove(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY,
+                        halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
                 })
                 $('.canvas').bind('click', function(e) {
-                    if (! zoomModeSet) {
-                        var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseMove(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
                 })
             }
             else {
                 $('.canvas').bind('mousedown', function(e) {
-                    if (zoomModeSet) {
-                        calcZoomScope(e.clientX, e.clientY);
-                    }
-                    else {
-                        var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseDown(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseDown(offsets[0], offsets[1]);
                 })
                 $('.canvas').bind('mousemove', function(e) {
-                    if (! zoomModeSet) {
-                        var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseMove(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseMove(offsets[0], offsets[1]);
                 })
                 $('.canvas').bind('mouseup', function(e) {
-                    if (! zoomModeSet) {
-                        var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseUp(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseUp(offsets[0], offsets[1]);
                 })
                 $('.canvas').bind('mouseout', function(e) {
-                    if (! zoomModeSet) {
-                        var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
-                        handleMouseOut(offsets[0], offsets[1]);
-                    }
+                    var offsets = calcXY(e.clientX, e.clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive);
+                    handleMouseOut(offsets[0], offsets[1]);
                 })
             }
         
@@ -228,24 +207,30 @@ $(document).ready(function() {
             }
         });
         
-        $('#zoomIn').click(function() {
-            zoomModeSet = true;
-            $('#zoomIn').attr('disabled', true);
-        });
-        
-        $('#zoomOut').click(function() {
-            zoomModeSet = false;
-            zoomModeActive = false;
+        $('.zoomButton').click(function() {
             
-            $('#zoomIn').attr('disabled', false);
-            $(".canvasSelected").panzoom("zoom", 1, { silent: true });
-            $(".canvasSelected").css('position', 'static');
-            $(".canvasSelected").css('top', '0px');
+            var zoomID = this.id;
+            var zoomNum = zoomID.substr(zoomID.length - 1);
+            
+            $('.zoomButton').each(function() {
+                if (this.id != zoomID) {
+                    $(this).removeClass('zoomHighlight');
+                }
+            })
+            
+            $(this).toggleClass("zoomHighlight");
+            
+            if ($(this).hasClass('zoomHighlight')) {
+                zoomModeActive = true;
+                calcZoomScope(zoomNum);
+            }
+            else {
+                zoomOut();
+            }
         });
         
         $('#nextMech').click(function() {
-            $('#zoomOut').click();
-            
+            zoomOut();
             var currentMech = (mechNumMod.mod(mechNumTotal)) + 1;
             mechNumMod++;
             var nextMech = (mechNumMod.mod(mechNumTotal)) + 1;
@@ -277,8 +262,7 @@ $(document).ready(function() {
         });
         
         $('#prevMech').click(function() {
-            $('#zoomOut').click();
-            
+            zoomOut();
             var currentMech = (mechNumMod.mod(mechNumTotal)) + 1;
             mechNumMod--;
             var prevMech = (mechNumMod.mod(mechNumTotal)) + 1;
@@ -412,47 +396,26 @@ $(document).ready(function() {
         }
     });
     
-    function calcZoomScope(passedX, passedY) {
-        
+    function calcZoomScope(zoomNum) {
         var mechID = $('.canvasSelected').css('background-image').split('?mechID=')[1].replace('")', '').replace(')', '');
         var mechType = mechTypes[mechID];
         
-        var calcX = passedX - (($(window).width() - pdfWidth) / 2);
-        var calcY = passedY - $('#floatBar').height();
-        if ($('#fillerDiv').height() != null) {
-            calcY -= $('#fillerDiv').height();
-        }
-
         if (mechType == 'elemental') {
-            if ((calcX < (pdfWidth * 0.62)) && (calcY < (pdfHeight * 0.51))) {
-                zoomArea = "elemental_group1";
-            }
-            else if ((calcX < (pdfWidth * 0.62)) && (calcY > (pdfHeight * 0.51))) {
-                zoomArea = "elemental_group2";
-            }
-            else if ((calcX > (pdfWidth * 0.62)) && (calcY < (pdfHeight * 0.54))) {
-                zoomArea = "elemental_attacks";
-            }
-            else if ((calcX > (pdfWidth * 0.62)) && (calcY > (pdfHeight * 0.54))) {
-                zoomArea = "elemental_swarm";
+            switch (zoomNum) {
+                case "1":
+                case "5": zoomArea = "elemental_group1"; break;
+                case "2": zoomArea = "elemental_group2"; break;
+                case "3": zoomArea = "elemental_attacks"; break;
+                case "4": zoomArea = "elemental_swarm"; break;
             }
         }
         else {
-            if ((calcX < (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
-                zoomArea = "critZoom";
-            }
-            else if ((calcX > (pdfWidth * 0.65)) && (calcY > (pdfHeight * 0.47))) {
-                zoomArea = "critArmor";
-            }
-            else if ((calcX < (pdfWidth * 0.41)) && (calcY < (pdfHeight * 0.47))) {
-                zoomArea = "weaponArea";
-            }
-            else if ((calcX > (pdfWidth * 0.65)) && (calcY < (pdfHeight * 0.47))) {
-                zoomArea = "mechArmor";
-            }
-            else if ((calcX < (pdfWidth * 0.65)) && (calcX > (pdfWidth * 0.41)) &&
-                     (calcY < (pdfHeight * 0.47))) {
-                zoomArea = "pilotSection";
+            switch (zoomNum) {
+                case "1": zoomArea = "weaponArea"; break;
+                case "2": zoomArea = "pilotSection"; break;
+                case "3": zoomArea = "mechArmor"; break;
+                case "4": zoomArea = "critZoom"; break;
+                case "5": zoomArea = "critArmor"; break;
             }
         }
         
@@ -461,13 +424,19 @@ $(document).ready(function() {
             $(".canvasSelected").css('position', 'relative');
             $(".canvasSelected").css('top', - (pdfHeight * window[zoomArea]['xOff']) + 'px');
             $(".canvasSelected").css('left', (pdfWidth * window[zoomArea]['yOff']) + 'px');
-            
-            setTimeout(function(){
-                zoomModeActive = true;
-                zoomModeSet = false;
-            }, 500);
         }
     };
+    
+    function zoomOut() {
+        $('.zoomButton').each(function() {
+            $(this).removeClass('zoomHighlight');
+        })
+        
+        zoomModeActive = false;
+        $(".canvasSelected").panzoom("zoom", 1, { silent: true });
+        $(".canvasSelected").css('position', 'static');
+        $(".canvasSelected").css('top', '0px');
+    }
     
     function calcXY(clientX, clientY, halfPageWidth, halfPageHeight, marginTop, zoomModeActive) {
         var offsetX = clientX;

@@ -99,10 +99,13 @@ include('phpScripts/cookie.php');
                     
                     <button id="clearCanvas"></button>
                     
-                    <button id="disableDraw">Disable/Enable Draw</button>
+                    <button id="disableDraw">Draw On/Off</button>
                     
-                    <button id="zoomIn">Zoom in</button>
-                    <button id="zoomOut">Zoom Out</button>
+                    <button id="zoom_1" class="zoomButton">Zoom 1</button>
+                    <button id="zoom_2" class="zoomButton">Zoom 2</button>
+                    <button id="zoom_3" class="zoomButton">Zoom 3</button>
+                    <button id="zoom_4" class="zoomButton">Zoom 4</button>
+                    <button id="zoom_5" class="zoomButton">Zoom 5</button>
                 </div>
                 
                 <div id='controlRight'>
