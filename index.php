@@ -25,7 +25,7 @@ include('phpScripts/cookie.php');
             
             <!-- Home Tab -->
             <div class="tabContainer">
-                <div class="viewTitle"></div>
+                <div class="viewTitle" id="exportMechs">Export</div>
                 <div class='menuBarTabs filled' id='allMechs'>
                     <div class='menuBarTabsContainer'>
                         <div>

@@ -6,9 +6,12 @@ $(document).ready(function() {
     $('#index').click(function() {
         location.replace('index.php');
     });
+    
     $('.viewTitle').click(function() {
-        var linkID = this.id.split('_')[0];
-        location.replace(linkID + '.php');
+        if (this.id != "exportMechs") {
+            var linkID = this.id.split('_')[0];
+            location.replace(linkID + '.php');
+        }
     });
     
     $.getJSON('./phpScripts/fetchViews.php', function(data) {
@@ -39,6 +42,17 @@ $(document).ready(function() {
     // Link to Upload page
     $('#uploadImage').click(function() {
         window.location='upload.php';
+    });
+    
+    // button to export the mechviews
+    $('#exportMechs').click(function() {
+        var pass = prompt('Enter password to save mechs');
+        
+        if (pass != "" && pass != null) {
+            $.getJSON('./phpScripts/exportMechs.php?pass=' + pass, function(saveResp) {
+                alert(saveResp);    
+            });
+        }
     });
     
     $.getJSON('phpScripts/getAllMechs.php', function(allMechs) {
