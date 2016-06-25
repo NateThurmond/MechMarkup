@@ -1,5 +1,6 @@
 <?php
 
+include('config/config.php');
 include('phpScripts/cookie.php');
 
 ?>
@@ -160,6 +161,6 @@ include('phpScripts/cookie.php');
         
     </body>
     
-    <script src='js/mainPage.js'></script>
+    <script src='js/mainPage.js?v=<?php echo VERSION; ?>'></script>
    
 </html>
