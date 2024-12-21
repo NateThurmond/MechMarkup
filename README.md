@@ -39,7 +39,7 @@ Data will be saved automatically as you make changes
 ## Version History
 
 -   0.3
-    -   Allow upload of custom record sheets
+    -   Allow upload of custom record sheets and export of marked up sheets
     -   Add vehicle and elemental record sheets
 -   0.2
     -   Added auto-save capability for markup changes
