@@ -6,6 +6,10 @@ This site utilizes Mongo databases and session tracking to implement a mobile fr
 
 I've developed other sites that allow customization of BattleMechs but this application is more centered towards management of those mechs once you hit the tabletop. It includes options for maintaining record sheets in the same view, zoom capability for different sections of the record sheet, and different markup options to make it easier to manage these while playing.
 
+## Getting Started
+
+<img src="assets/videos/demoUse.min.gif" width="450" />
+
 ### Dependencies
 
 -   Docker Desktop
