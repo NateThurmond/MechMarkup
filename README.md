@@ -27,7 +27,7 @@ I've developed other sites that allow customization of BattleMechs but this appl
 -   Step-by-step guide below
 
 ```
-Navigate to http://localhost:3000/
+Navigate to http://localhost:8090/
 
 Data will be saved automatically as you make changes
 ```
