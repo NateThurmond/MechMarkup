@@ -1,1 +1,6 @@
-config/config.php
+# Database config file for MechDesign PHP project
+.env
+vendor/
+
+# Mac finder index
+**/.DS_Store

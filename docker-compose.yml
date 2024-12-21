@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+    php-app:
+        image: php:latest # Pulls the latest PHP version
+        build:
+            context: .
+        ports:
+            - "8090:80"
+        volumes:
+            - ./:/var/www/html
+            - ./.env:/var/www/.env
+            - /var/www/html/vendor # Exclude vendor directory from being overwritten
+        depends_on:
+            - mongo # Ensure MongoDB starts before the app
+            - db # Ensure MySQL starts before the PHP app
+        environment:
+            MONGO_URI: mongodb://mongo:27017/${MONGO_DB}
+            MYSQL_HOST: ${MYSQL_HOST}
+            MYSQL_DATABASE: ${MONGO_DB}
+            MYSQL_USER: ${MONGO_USER}
+            MYSQL_PASSWORD: ${MONGO_PASS}
+
+    mongo:
+        image: mongo:latest
+        container_name: mongo-container
+        ports:
+            - "27017:27017"
+        volumes:
+            - mongo_data:/data/db
+            - ./mongo-init-scripts:/docker-entrypoint-initdb.d # Seed database
+
+    db:
+        image: mysql:8.0 # Use MySQL 8.0
+        container_name: mysql-container
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MECH_SAVE_PASS}
+            MYSQL_DATABASE: ${MONGO_DB}
+            MYSQL_USER: ${MONGO_USER}
+            MYSQL_PASSWORD: ${MONGO_PASS}
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./db-init-scripts:/docker-entrypoint-initdb.d # Seed database
+
+volumes:
+    mongo_data:
+    db_data:
