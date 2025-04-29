@@ -45,7 +45,7 @@ Data will be saved automatically as you make changes
     -   Add vehicle and elemental record sheets
 -   0.2
     -   Added auto-save capability for markup changes
-    -   See [commit change]() or See [release history]()
+    -   See [commit change](https://github.com/NateThurmond/MechMarkup/commits/master/) or See [release history](https://github.com/NateThurmond/MechMarkup/releases)
 -   0.1
     -   Initial Development
 
